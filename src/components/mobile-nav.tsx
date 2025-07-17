@@ -1,38 +1,6 @@
 import Link from "next/link";
 import { Button } from "./ui/button";
-import IconNavOverview from "./ui/svg/icon-nav-overview";
-import IconNavTransactions from "./ui/svg/icon-nav-transactions";
-import IconNavBudgets from "./ui/svg/icon-nav-budgets";
-import IconNavPots from "./ui/svg/icon-nav-pots";
-import IconNavRecurringBills from "./ui/svg/icon-nav-recurring-bills";
-
-const navData = [
-  {
-    title: "Overview",
-    url: "/",
-    icon: IconNavOverview,
-  },
-  {
-    title: "Transactions",
-    url: "/transactions",
-    icon: IconNavTransactions,
-  },
-  {
-    title: "Budgets",
-    url: "/budgets",
-    icon: IconNavBudgets,
-  },
-  {
-    title: "Pots",
-    url: "/pots",
-    icon: IconNavPots,
-  },
-  {
-    title: "Recurring Bills",
-    url: "/recurring-bills",
-    icon: IconNavRecurringBills,
-  },
-];
+import { navData } from "@/data/nav-data";
 
 export default function MobileNav() {
   return (
