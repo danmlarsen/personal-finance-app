@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "./globals.css";
 import MobileNav from "@/components/mobile-nav";
+import DesktopNav from "@/components/desktop-nav";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -20,7 +21,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${publicSans.className} antialiased`}>
-        {children}
+        <div className="grid min-h-screen lg:grid-cols-[auto_1fr]">
+          <DesktopNav />
+          <main>{children}</main>
+        </div>
+
         <MobileNav />
       </body>
     </html>
