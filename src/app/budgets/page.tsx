@@ -1,3 +1,5 @@
-export default function BudgetPage() {
-  return <div>budget</div>;
+import Budgets from "./budgets";
+
+export default function BudgetsPage() {
+  return <Budgets />;
 }
