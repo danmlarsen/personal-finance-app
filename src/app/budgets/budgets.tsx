@@ -10,17 +10,13 @@ export default function Budgets() {
         <h1>Budgets</h1>
         <Button>+ Add New Budget</Button>
       </div>
-      <div className="grid grid-cols-[428px_1fr] gap-6">
+      <div className="grid gap-6 lg:grid-cols-[428px_1fr]">
         <Card>
           <CardContent>
             <BudgetsSummary />
           </CardContent>
         </Card>
-        <Card>
-          <CardContent>
-            <BudgetsList />
-          </CardContent>
-        </Card>
+        <BudgetsList />
       </div>
     </div>
   );
