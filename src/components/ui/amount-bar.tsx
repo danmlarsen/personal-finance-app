@@ -7,7 +7,7 @@ export default function AmountBar({
   max: number;
   themeColor: string;
 }) {
-  const widthPercent = Math.round((amount / max) * 100);
+  const widthPercent = Math.min(Math.round((amount / max) * 100), 100);
 
   return (
     <div className="grid h-8 rounded-sm bg-amber-50 p-1">
