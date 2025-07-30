@@ -1,6 +1,8 @@
 import AmountBar from "@/components/ui/amount-bar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { transactions, budgets } from "@/data/data.json";
+import { format } from "date-fns";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function BudgetsList() {
@@ -56,16 +58,33 @@ export default function BudgetsList() {
                   </div>
                 </div>
 
-                <Card>
+                <Card className="border-none bg-amber-50 shadow-none">
                   <CardHeader className="flex items-center justify-between">
                     <h3>Latest Spending</h3>
                     <Link href="#">See All</Link>
                   </CardHeader>
                   <CardContent>
-                    <ul>
+                    <ul className="divide-y divide-amber-200">
                       {recentTransactions.map((transaction, idx) => (
                         <li key={`${transaction.name}_${idx}`}>
-                          {transaction.name}
+                          <div className="flex justify-between py-3">
+                            <div className="flex items-center gap-4">
+                              <Image
+                                src={transaction.avatar}
+                                alt=""
+                                width={32}
+                                height={32}
+                                className="rounded-full"
+                              />
+                              <span>{transaction.name}</span>
+                            </div>
+                            <div className="text-end">
+                              <div>${transaction.amount}</div>
+                              <div>
+                                {format(transaction.date, "dd MMM yyyy")}
+                              </div>
+                            </div>
+                          </div>
                         </li>
                       ))}
                     </ul>
