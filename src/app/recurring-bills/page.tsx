@@ -1,3 +1,5 @@
+import RecurringBills from "./recurring-bills";
+
 export default function RecurringBillsPage() {
-  return <div>recurring bills</div>;
+  return <RecurringBills />;
 }
