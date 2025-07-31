@@ -12,10 +12,11 @@ import {
 
 import { transactions } from "@/data/data.json";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { uniqueTransactionByName } from "@/lib/utils";
 import { format } from "date-fns";
 
 export default function RecurringBillsList() {
-  const recurringBills = transactions.filter(
+  const recurringBills = uniqueTransactionByName(transactions).filter(
     (transaction) => !!transaction.recurring,
   );
 

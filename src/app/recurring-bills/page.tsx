@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import RecurringBillsList from "./recurring-bills-list";
+import RecurringBillsSummary from "./recurring-bills-summary";
 
 export default function RecurringBillsPage() {
   return (
@@ -8,9 +9,7 @@ export default function RecurringBillsPage() {
         <h1>Recurring Bills</h1>
       </div>
       <div className="grid gap-6 lg:grid-cols-[337px_1fr]">
-        <Card>
-          <CardContent>total bills</CardContent>
-        </Card>
+        <RecurringBillsSummary />
         <Card>
           <CardContent>
             <RecurringBillsList />
