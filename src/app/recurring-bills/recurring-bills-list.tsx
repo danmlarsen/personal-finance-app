@@ -1,5 +1,6 @@
 "use client";
 
+import TransactionTitle from "@/components/transaction-title";
 import {
   Table,
   TableBody,
@@ -42,7 +43,9 @@ export default function RecurringBillsList() {
       <TableBody>
         {recurringBills.map((bill, idx) => (
           <TableRow key={`${bill.name}_${idx}`}>
-            <TableCell>{bill.name}</TableCell>
+            <TableCell>
+              <TransactionTitle title={bill.name} avatarUrl={bill.avatar} />
+            </TableCell>
             <TableCell className="w-[120px]">
               Monthly - {format(bill.date, "do")}
             </TableCell>
