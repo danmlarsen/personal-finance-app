@@ -1,13 +1,13 @@
 import dotenv from "dotenv";
 import data from "@/data/data.json";
 import {
+  balanceTable,
   budgetsTable,
   categoriesTable,
   potsTable,
   transactionsTable,
 } from "./schema";
 import { drizzle } from "drizzle-orm/neon-http";
-import { eq } from "drizzle-orm";
 
 dotenv.config({
   path: ".env.local",
@@ -29,6 +29,16 @@ async function insertCategories() {
 
 async function getCategories() {
   return db.select().from(categoriesTable);
+}
+
+async function insertBalance() {
+  await db.insert(balanceTable).values([
+    {
+      current: data.balance.current.toString(),
+      income: data.balance.income.toString(),
+      expenses: data.balance.expenses.toString(),
+    },
+  ]);
 }
 
 async function insertTransactions(categories: { id: number; name: string }[]) {
@@ -76,6 +86,7 @@ async function insertPots() {
 }
 
 async function main() {
+  await insertBalance();
   await insertCategories();
   const categories = await getCategories();
   await insertTransactions(categories);
