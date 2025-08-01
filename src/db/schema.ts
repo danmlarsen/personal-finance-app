@@ -14,7 +14,7 @@ export const balanceTable = pgTable("balance", {
   expenses: numeric().default("0").notNull(),
 });
 
-export const categoriesTable = pgTable("category", {
+export const categoriesTable = pgTable("categories", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   name: varchar({ length: 255 }).notNull().unique(),
 });
