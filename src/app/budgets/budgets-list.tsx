@@ -1,27 +1,22 @@
 import AmountBar from "@/components/ui/amount-bar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { transactions, budgets } from "@/data/data.json";
+import { getBudgets } from "@/data/getBudgets";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function BudgetsList() {
+export default async function BudgetsList() {
+  const budgets = await getBudgets();
+
   return (
     <ul className="space-y-10">
       {budgets.map((budget) => {
-        const budgetTransactions = transactions.filter(
-          (transaction) => transaction.category === budget.category,
-        );
-        const recentTransactions = budgetTransactions.slice(-3);
-        const spentAmount = recentTransactions.reduce(
-          (totalAmount, transaction) =>
-            totalAmount + Math.abs(transaction.amount),
-          0,
-        );
-        const remainingAmount = budget.maximum - spentAmount;
+        const spentAmount = Math.abs(Number(budget.totalSpent));
+        const maximumAmount = Number(budget.maximum);
+        const remainingAmount = Math.max(maximumAmount - spentAmount, 0);
 
         return (
-          <li key={budget.category}>
+          <li key={budget.id}>
             <Card>
               <CardHeader className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -29,17 +24,17 @@ export default function BudgetsList() {
                     className="size-4 rounded-full"
                     style={{ backgroundColor: budget.theme }}
                   />
-                  <h2>{budget.category}</h2>
+                  <h2>{budget.name}</h2>
                 </div>
                 <div>...</div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
-                  Maximum of ${budget.maximum.toFixed(2)}
+                  Maximum of ${Number(budget.maximum).toFixed(2)}
                 </p>
                 <AmountBar
                   amount={spentAmount}
-                  max={budget.maximum}
+                  max={maximumAmount}
                   themeColor={budget.theme}
                 />
                 <div className="grid grid-cols-2 gap-4">
@@ -65,28 +60,35 @@ export default function BudgetsList() {
                   </CardHeader>
                   <CardContent>
                     <ul className="divide-y divide-amber-200">
-                      {recentTransactions.map((transaction, idx) => (
-                        <li key={`${transaction.name}_${idx}`}>
-                          <div className="flex justify-between py-3">
-                            <div className="flex items-center gap-4">
-                              <Image
-                                src={transaction.avatar}
-                                alt=""
-                                width={32}
-                                height={32}
-                                className="rounded-full"
-                              />
-                              <span>{transaction.name}</span>
-                            </div>
-                            <div className="text-end">
-                              <div>${transaction.amount}</div>
-                              <div>
-                                {format(transaction.date, "dd MMM yyyy")}
+                      {budget.recentTransactions?.map((transaction) => {
+                        const transactionAmount = Number(transaction.amount);
+
+                        return (
+                          <li key={transaction.id}>
+                            <div className="flex justify-between py-3">
+                              <div className="flex items-center gap-4">
+                                <Image
+                                  src={transaction.avatar}
+                                  alt=""
+                                  width={32}
+                                  height={32}
+                                  className="rounded-full"
+                                />
+                                <span>{transaction.name}</span>
+                              </div>
+                              <div className="text-end">
+                                <div>${transactionAmount}</div>
+                                <div>
+                                  {format(
+                                    transaction.created_at,
+                                    "dd MMM yyyy",
+                                  )}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </li>
-                      ))}
+                          </li>
+                        );
+                      })}
                     </ul>
                   </CardContent>
                 </Card>
