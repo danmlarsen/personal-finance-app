@@ -7,9 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { pots } from "@/data/data.json";
+import { getPots } from "@/data/getPots";
 
-export default function PotsList() {
+export default async function PotsList() {
+  const pots = await getPots();
+
   return (
     <ul className="grid gap-6 lg:grid-cols-2">
       {pots.map((pot) => {
