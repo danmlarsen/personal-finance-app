@@ -6,12 +6,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
 
-import { transactions } from "@/data/data.json";
 import TransactionTitle from "@/components/transaction-title";
+import { getTransactions } from "@/data/getTransactions";
 
-export default function TransactionsList() {
+export default async function TransactionsList() {
+  const transactions = await getTransactions();
+
   return (
     <Table>
       <TableHeader>
