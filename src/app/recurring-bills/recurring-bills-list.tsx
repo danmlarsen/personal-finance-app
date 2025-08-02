@@ -8,12 +8,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getRecurringBills } from "@/data/getRecurringBills";
+import { type TRecurringBill } from "@/data/getRecurringBills";
 import { format } from "date-fns";
 
-export default async function RecurringBillsList() {
-  const recurringBills = await getRecurringBills();
-
+export default function RecurringBillsList({
+  recurringBills,
+}: {
+  recurringBills: TRecurringBill[];
+}) {
   const sortedRecurringBills = recurringBills.sort((a, b) => {
     const monthA = new Date(a.created_at).getDate();
     const monthB = new Date(b.created_at).getDate();

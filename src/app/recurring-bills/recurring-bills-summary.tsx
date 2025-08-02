@@ -1,36 +1,35 @@
 import { Card, CardContent } from "@/components/ui/card";
 
-import { transactions } from "@/data/data.json";
-import { uniqueTransactionByName } from "@/lib/utils";
+import { type TRecurringBill } from "@/data/getRecurringBills";
 import { isPast, isSameMonth } from "date-fns";
 
-export default function RecurringBillsSummary() {
+export default function RecurringBillsSummary({
+  recurringBills,
+}: {
+  recurringBills: TRecurringBill[];
+}) {
   const today = new Date(2024, 7, 12);
 
-  const validTransactions = transactions.filter(
-    (transaction) => transaction.recurring,
-  );
-
-  const totalBillsAmount = uniqueTransactionByName(validTransactions).reduce(
-    (total, transaction) => Math.abs(transaction.amount) + total,
+  const totalBillsAmount = recurringBills.reduce(
+    (total, transaction) => Math.abs(Number(transaction.amount)) + total,
     0,
   );
 
-  const paidBills = validTransactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.date);
+  const paidBills = recurringBills.filter((transaction) => {
+    const transactionDate = new Date(transaction.created_at);
     return isSameMonth(today, transactionDate) && isPast(transactionDate);
   });
   const paidBillsAmount = paidBills.reduce(
-    (total, transaction) => Math.abs(transaction.amount) + total,
+    (total, transaction) => Math.abs(Number(transaction.amount)) + total,
     0,
   );
 
-  const totalUpcoming = validTransactions.filter((transaction) => {
-    const transactionDate = new Date(transaction.date);
+  const totalUpcoming = recurringBills.filter((transaction) => {
+    const transactionDate = new Date(transaction.created_at);
     return transactionDate.getDate() > today.getDate();
   });
   const totalUpcomingAmount = totalUpcoming.reduce(
-    (total, transaction) => Math.abs(transaction.amount) + total,
+    (total, transaction) => Math.abs(Number(transaction.amount)) + total,
     0,
   );
 
@@ -40,6 +39,29 @@ export default function RecurringBillsSummary() {
         <CardContent>
           <p>Total Bills</p>
           <p>${totalBillsAmount}</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <p>Summary</p>
+          <ul>
+            <li className="flex justify-between">
+              <p>Paid Bills</p>
+              <p>
+                {paidBills.length}(${paidBillsAmount.toFixed(2)})
+              </p>
+            </li>
+            <li className="flex justify-between">
+              <p>Total Upcoming</p>
+              <p>
+                {totalUpcoming.length}(${totalUpcomingAmount.toFixed(2)})
+              </p>
+            </li>
+            <li className="flex justify-between">
+              <p>Due Soon</p>
+              <p></p>
+            </li>
+          </ul>
         </CardContent>
       </Card>
     </div>
