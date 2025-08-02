@@ -1,5 +1,3 @@
-"use client";
-
 import TransactionTitle from "@/components/transaction-title";
 import {
   Table,
@@ -10,27 +8,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { transactions } from "@/data/data.json";
-import { useMediaQuery } from "@/hooks/use-media-query";
-import { uniqueTransactionByName } from "@/lib/utils";
+import { getRecurringBills } from "@/data/getRecurringBills";
 import { format } from "date-fns";
 
-export default function RecurringBillsList() {
-  const recurringBills = uniqueTransactionByName(transactions).filter(
-    (transaction) => !!transaction.recurring,
-  );
+export default async function RecurringBillsList() {
+  const recurringBills = await getRecurringBills();
 
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  const sortedRecurringBills = recurringBills.sort((a, b) => {
+    const monthA = new Date(a.created_at).getDate();
+    const monthB = new Date(b.created_at).getDate();
+    return monthA - monthB;
+  });
 
-  if (isMobile) {
-    return (
-      <ul>
-        {recurringBills.map((bill, idx) => (
-          <li key={`${bill.name}_${idx}`}>{bill.name}</li>
-        ))}
-      </ul>
-    );
-  }
+  // const isMobile = useMediaQuery("(max-width: 600px)");
+
+  // if (isMobile) {
+  //   return (
+  //     <ul>
+  //       {recurringBills.map((bill, idx) => (
+  //         <li key={`${bill.name}_${idx}`}>{bill.name}</li>
+  //       ))}
+  //     </ul>
+  //   );
+  // }
 
   return (
     <Table>
@@ -42,19 +42,21 @@ export default function RecurringBillsList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {recurringBills.map((bill, idx) => (
-          <TableRow key={`${bill.name}_${idx}`}>
-            <TableCell>
-              <TransactionTitle title={bill.name} avatarUrl={bill.avatar} />
-            </TableCell>
-            <TableCell className="w-[120px]">
-              Monthly - {format(bill.date, "do")}
-            </TableCell>
-            <TableCell className="w-[100px] text-end">
-              ${Math.abs(bill.amount).toFixed(2)}
-            </TableCell>
-          </TableRow>
-        ))}
+        {sortedRecurringBills.map((bill, idx) => {
+          return (
+            <TableRow key={`${bill.name}_${idx}`}>
+              <TableCell>
+                <TransactionTitle title={bill.name} avatarUrl={bill.avatar} />
+              </TableCell>
+              <TableCell className="w-[120px]">
+                Monthly - {format(bill.created_at, "do")}
+              </TableCell>
+              <TableCell className="w-[100px] text-end">
+                ${Math.abs(Number(bill.amount)).toFixed(2)}
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );
