@@ -8,30 +8,13 @@ import {
 } from "@/components/ui/table";
 
 import TransactionTitle from "@/components/transaction-title";
-import { getTransactions } from "@/data/getTransactions";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { type TTransaction } from "@/data/getTransactions";
 
 export default async function TransactionsList({
-  transactionName,
-  category = "all",
-  sortBy = "latest",
-  page = 1,
+  transactions,
 }: {
-  transactionName?: string;
-  category?: string;
-  sortBy?: string;
-  page?: number;
+  transactions: TTransaction[];
 }) {
-  const { totalNumTransactions, transactions } = await getTransactions({
-    transactionName,
-    category,
-    sortBy,
-    page,
-  });
-
-  const numPages = Math.ceil(totalNumTransactions / 10);
-
   return (
     <>
       <Table>
@@ -64,27 +47,6 @@ export default async function TransactionsList({
           ))}
         </TableBody>
       </Table>
-      <div className="grid grid-cols-[auto_1fr_auto]">
-        <Button variant="outline" asChild>
-          <Link href={`/transactions?page=${page > 1 ? page - 1 : 1}`}>
-            Prev
-          </Link>
-        </Button>
-        <div className="flex justify-center gap-2">
-          {Array.from({ length: numPages }).map((_, idx) => (
-            <Button variant="outline" key={idx} asChild>
-              <Link href={`/transactions?page=${idx + 1}`}>{idx + 1}</Link>
-            </Button>
-          ))}
-        </div>
-        <Button asChild variant="outline">
-          <Link
-            href={`/transactions?page=${page < numPages ? page + 1 : numPages}`}
-          >
-            Next
-          </Link>
-        </Button>
-      </div>
     </>
   );
 }

@@ -11,6 +11,20 @@ export type TGetTransactionParams = {
   pageSize?: number;
 };
 
+export type TTransaction = {
+  id: number;
+  name: string;
+  amount: number;
+  category: string;
+  date: string;
+  avatar: string;
+};
+
+export type TGetTransactionsResult = {
+  totalNumTransactions: number;
+  transactions: TTransaction[];
+};
+
 export async function getTransactions({
   transactionName,
   sortBy = "latest",
