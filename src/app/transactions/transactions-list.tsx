@@ -10,8 +10,23 @@ import {
 import TransactionTitle from "@/components/transaction-title";
 import { getTransactions } from "@/data/getTransactions";
 
-export default async function TransactionsList() {
-  const transactions = await getTransactions();
+export default async function TransactionsList({
+  transactionName,
+  category = "all",
+  sortBy = "latest",
+  page = 1,
+}: {
+  transactionName?: string;
+  category?: string;
+  sortBy?: string;
+  page?: number;
+}) {
+  const { totalNumTransactions, transactions } = await getTransactions({
+    transactionName,
+    category,
+    sortBy,
+    page,
+  });
 
   return (
     <Table>
