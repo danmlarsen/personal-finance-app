@@ -1,8 +1,15 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import TransactionsList from "./transactions-list";
 import { getTransactions } from "@/data/getTransactions";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TransactionsOptions from "./transactions-options";
+import { getCategories } from "@/data/getCategories";
 
 export default async function TransactionsPage({
   searchParams,
@@ -20,6 +27,7 @@ export default async function TransactionsPage({
   const category = searchParamValues.category || "all";
   const page = Number(searchParamValues.page) || 1;
 
+  const categories = await getCategories();
   const { totalNumTransactions, transactions } = await getTransactions({
     transactionName,
     category,
@@ -33,6 +41,13 @@ export default async function TransactionsPage({
     <div>
       <h1>Transactions</h1>
       <Card>
+        <CardHeader>
+          <TransactionsOptions
+            sortby={sortBy}
+            selectedCategory={category}
+            categories={categories}
+          />
+        </CardHeader>
         <CardContent>
           <TransactionsList transactions={transactions} />
         </CardContent>
