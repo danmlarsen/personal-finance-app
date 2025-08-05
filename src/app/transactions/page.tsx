@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import TransactionsOptions from "./transactions-options";
 import { getCategories } from "@/data/getCategories";
+import TransactionsPagination from "./transactions-pagination";
 
 export default async function TransactionsPage({
   searchParams,
@@ -48,27 +49,7 @@ export default async function TransactionsPage({
           <TransactionsList transactions={transactions} />
         </CardContent>
         <CardFooter className="block">
-          <div className="grid grid-cols-[auto_1fr_auto]">
-            <Button variant="outline" asChild>
-              <Link href={`/transactions?page=${page > 1 ? page - 1 : 1}`}>
-                Prev
-              </Link>
-            </Button>
-            <div className="flex justify-center gap-2">
-              {Array.from({ length: numPages }).map((_, idx) => (
-                <Button variant="outline" key={idx} asChild>
-                  <Link href={`/transactions?page=${idx + 1}`}>{idx + 1}</Link>
-                </Button>
-              ))}
-            </div>
-            <Button asChild variant="outline">
-              <Link
-                href={`/transactions?page=${page < numPages ? page + 1 : numPages}`}
-              >
-                Next
-              </Link>
-            </Button>
-          </div>
+          <TransactionsPagination numPages={numPages} />
         </CardFooter>
       </Card>
     </div>
