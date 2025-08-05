@@ -42,11 +42,7 @@ export default async function TransactionsPage({
       <h1>Transactions</h1>
       <Card>
         <CardHeader>
-          <TransactionsOptions
-            sortby={sortBy}
-            selectedCategory={category}
-            categories={categories}
-          />
+          <TransactionsOptions categories={categories} />
         </CardHeader>
         <CardContent>
           <TransactionsList transactions={transactions} />
