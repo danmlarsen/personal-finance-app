@@ -6,8 +6,6 @@ import {
 } from "@/components/ui/card";
 import TransactionsList from "./transactions-list";
 import { getTransactions } from "@/data/getTransactions";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import TransactionsOptions from "./transactions-options";
 import { getCategories } from "@/data/getCategories";
 import TransactionsPagination from "./transactions-pagination";
