@@ -16,17 +16,14 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
     };
   }
 
-  const [pot] = await db
-    .insert(potsTable)
-    .values({
-      ...data,
-      target: data.target.toString(),
-      total: "0",
-    })
-    .returning();
+  await db.insert(potsTable).values({
+    ...data,
+    target: data.target.toString(),
+    total: "0",
+  });
 
   return {
-    id: pot.id,
+    success: true,
   };
 }
 

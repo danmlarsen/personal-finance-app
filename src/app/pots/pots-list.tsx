@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getPots } from "@/data/getPots";
+import PotsDropdownMenu from "./pots-dropdown-menu";
 
 export default async function PotsList() {
   const pots = await getPots();
@@ -28,7 +29,7 @@ export default async function PotsList() {
                   />
                   <h2>{pot.name}</h2>
                 </CardTitle>
-                <div>...</div>
+                <PotsDropdownMenu potId={pot.id} />
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">

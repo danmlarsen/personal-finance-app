@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 
 import { z } from "zod";
 import { createPot } from "./actions";
+import { useRouter } from "next/navigation";
 
 export default function PotsForm() {
   const form = useForm({
@@ -34,11 +35,10 @@ export default function PotsForm() {
       theme: "",
     },
   });
+  const router = useRouter();
 
   async function handleSubmit(data: z.infer<typeof potsFormSchema>) {
     const response = await createPot(data);
-
-    console.log(response);
   }
 
   return (
