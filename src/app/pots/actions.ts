@@ -2,33 +2,39 @@
 
 import { db } from "@/db";
 import { balanceTable, potsTable } from "@/db/schema";
-import { potFormSchema } from "@/validation/potFormSchema";
+import { potsFormSchema } from "@/validation/potsFormSchema";
 import { eq, InferInsertModel, sql } from "drizzle-orm";
-import z from "zod";
+import { z } from "zod";
 
-export async function createPot(
-  data: Omit<InferInsertModel<typeof potsTable>, "total">,
-) {
-  const validation = z.safeParse(potFormSchema, data);
+export async function createPot(data: z.infer<typeof potsFormSchema>) {
+  const validation = z.safeParse(potsFormSchema, data);
 
   if (!validation.success) {
     return {
       error: true,
-      message: validation.error.issues[0].message ?? "An error occured",
+      message: validation.error.issues,
     };
   }
 
-  await db.insert(potsTable).values({
-    ...data,
-    total: "0",
-  });
+  const [pot] = await db
+    .insert(potsTable)
+    .values({
+      ...data,
+      target: data.target.toString(),
+      total: "0",
+    })
+    .returning();
+
+  return {
+    id: pot.id,
+  };
 }
 
 export async function editPot(
   id: number,
   data: Omit<InferInsertModel<typeof potsTable>, "total">,
 ) {
-  const validation = z.safeParse(potFormSchema, data);
+  const validation = z.safeParse(potsFormSchema, data);
 
   if (!validation.success) {
     return {
