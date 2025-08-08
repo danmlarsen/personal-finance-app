@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/card";
 import { getPots } from "@/data/getPots";
 import PotsDropdownMenu from "./pots-dropdown-menu";
+import PotsDepositButton from "./pots-deposit-button";
+import PotsWithdrawButton from "./pots-withdraw-button";
 
 export default async function PotsList() {
   const pots = await getPots();
@@ -49,8 +51,8 @@ export default async function PotsList() {
                 </div>
               </CardContent>
               <CardFooter className="grid grid-cols-2 gap-4">
-                <Button variant="secondary">+ Add Money</Button>
-                <Button variant="secondary">Withdraw</Button>
+                <PotsDepositButton pot={pot} />
+                <PotsWithdrawButton pot={pot} />
               </CardFooter>
             </Card>
           </li>
