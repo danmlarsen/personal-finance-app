@@ -16,7 +16,9 @@ export default async function PotsList() {
   return (
     <ul className="grid gap-6 lg:grid-cols-2">
       {pots.map((pot) => {
-        const percentSaved = Math.min((pot.total / pot.target) * 100, 100);
+        const potTotal = Number(pot.total);
+        const potTarget = Number(pot.target);
+        const percentSaved = Math.min((potTotal / potTarget) * 100, 100);
 
         return (
           <li key={pot.name}>
@@ -29,21 +31,21 @@ export default async function PotsList() {
                   />
                   <h2>{pot.name}</h2>
                 </CardTitle>
-                <PotsDropdownMenu potId={pot.id} />
+                <PotsDropdownMenu pot={pot} />
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                   <p>Total Saved</p>
-                  <p className="text-3xl font-bold">${pot.total.toFixed(2)}</p>
+                  <p className="text-3xl font-bold">${potTotal.toFixed(2)}</p>
                 </div>
                 <AmountBar
-                  amount={pot.total}
-                  max={pot.target}
+                  amount={potTotal}
+                  max={potTarget}
                   themeColor={pot.theme}
                 />
                 <div className="flex items-center justify-between">
                   <p>{percentSaved.toFixed(2)}%</p>
-                  <p>Target of ${pot.target}</p>
+                  <p>Target of ${potTarget}</p>
                 </div>
               </CardContent>
               <CardFooter className="grid grid-cols-2 gap-4">
