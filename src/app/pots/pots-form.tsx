@@ -26,7 +26,7 @@ import { z } from "zod";
 import { createPot } from "./actions";
 import { useRouter } from "next/navigation";
 
-export default function PotsForm() {
+export default function PotsForm({ onSuccess }: { onSuccess?: () => void }) {
   const form = useForm({
     resolver: zodResolver(potsFormSchema),
     defaultValues: {
@@ -39,6 +39,11 @@ export default function PotsForm() {
 
   async function handleSubmit(data: z.infer<typeof potsFormSchema>) {
     const response = await createPot(data);
+
+    if (response.success) {
+      router.refresh();
+      onSuccess?.();
+    }
   }
 
   return (
