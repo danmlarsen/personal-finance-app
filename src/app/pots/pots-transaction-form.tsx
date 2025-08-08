@@ -52,10 +52,56 @@ export default function PotsTransactionForm({
     }
   }
 
+  const potTotal = Number(pot.total);
+  const potTarget = Number(pot.target);
+
+  const amount = Math.abs(Number(form.watch("amount")));
+  const newAmount =
+    transactionType === "deposit"
+      ? potTotal + amount
+      : Math.max(potTotal - amount, 0);
+
+  const currentPercent = Math.min((potTotal / potTarget) * 100, 100);
+  const amountPercent = Math.min(
+    (amount / potTarget) * 100,
+    100 - currentPercent,
+  );
+  const newPercent = Math.min((newAmount / potTarget) * 100, 100);
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div>amount: {pot.total}</div>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p>New Amount</p>
+            <p>${newAmount || potTotal}</p>
+          </div>
+
+          <div className="flex h-2 gap-0.5 overflow-hidden rounded-md bg-amber-50">
+            <div
+              className="flex h-2 justify-end overflow-hidden rounded-md bg-black"
+              style={{ width: `${currentPercent}%` }}
+            >
+              {transactionType === "withdraw" && (
+                <div
+                  className="h-2 bg-red-900"
+                  style={{ width: `${amountPercent}%` }}
+                />
+              )}
+            </div>
+            {transactionType === "deposit" && (
+              <div
+                className="h-2 rounded-r-md bg-green-900"
+                style={{ width: `${amountPercent}%` }}
+              />
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p>{newPercent.toFixed(2)}%</p>
+            <p>Target of ${potTarget}</p>
+          </div>
+        </div>
 
         <FormField
           control={form.control}
@@ -74,7 +120,9 @@ export default function PotsTransactionForm({
           )}
         />
 
-        <Button type="submit">Confirm {transactionType}</Button>
+        <Button type="submit" className="w-full">
+          Confirm {transactionType}
+        </Button>
       </form>
     </Form>
   );
