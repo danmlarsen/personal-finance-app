@@ -14,17 +14,25 @@ import z from "zod";
 import { useRouter } from "next/navigation";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
 import BudgetsForm from "./budgets-form";
+import { InferSelectModel } from "drizzle-orm";
+import { categoriesTable } from "@/db/schema";
+import { createBudget } from "./actions";
 
 export default function AddNewBudgetButton({
   categories,
 }: {
-  categories: string[];
+  categories: InferSelectModel<typeof categoriesTable>[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
   async function handleSubmit(data: z.infer<typeof budgetFormSchema>) {
-    setIsOpen(false);
+    const response = await createBudget(data);
+
+    if (response.success) {
+      router.refresh();
+      setIsOpen(false);
+    }
   }
 
   return (

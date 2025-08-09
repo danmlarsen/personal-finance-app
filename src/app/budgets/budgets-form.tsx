@@ -16,8 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { categoriesTable } from "@/db/schema";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InferSelectModel } from "drizzle-orm";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -28,14 +30,14 @@ export default function BudgetsForm({
   submitButtonText = "Add Budget",
 }: {
   onSubmit: (data: z.infer<typeof budgetFormSchema>) => Promise<void>;
-  categories: string[];
+  categories: InferSelectModel<typeof categoriesTable>[];
   defaultValues?: { category: string; maximum: number | string; theme: string };
   submitButtonText?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(budgetFormSchema),
     defaultValues: {
-      category: "",
+      category: 0,
       maximum: "",
       theme: "",
       ...defaultValues,
@@ -55,7 +57,7 @@ export default function BudgetsForm({
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
               <Select
-                defaultValue={field.value}
+                value={String(field.value)}
                 onValueChange={(value) => field.onChange(value)}
               >
                 <SelectTrigger>
@@ -63,8 +65,11 @@ export default function BudgetsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((category) => (
-                    <SelectItem key={category} value={category}>
-                      {category}
+                    <SelectItem
+                      key={category.id}
+                      value={category.id.toString()}
+                    >
+                      {category.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
