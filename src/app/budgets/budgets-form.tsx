@@ -31,7 +31,7 @@ export default function BudgetsForm({
 }: {
   onSubmit: (data: z.infer<typeof budgetFormSchema>) => Promise<void>;
   categories: InferSelectModel<typeof categoriesTable>[];
-  defaultValues?: { category: string; maximum: number | string; theme: string };
+  defaultValues?: { category: number; maximum: string; theme: string };
   submitButtonText?: string;
 }) {
   const form = useForm({

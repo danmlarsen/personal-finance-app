@@ -13,6 +13,7 @@ export type TRecentTransaction = {
 
 export type TBudget = {
   id: number;
+  category_id: number;
   maximum: string;
   theme: string;
   name: string;
@@ -26,6 +27,7 @@ export async function getBudgets() {
   const budgets = await db.execute<TBudget>(sql`
   SELECT 
     b.id,
+    b.category_id,
     b.maximum,
     b.theme,
     c.name,

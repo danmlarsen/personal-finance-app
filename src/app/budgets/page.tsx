@@ -19,7 +19,7 @@ export default async function BudgetsPage() {
             <BudgetsSummary />
           </CardContent>
         </Card>
-        <BudgetsList />
+        <BudgetsList categories={categories} />
       </div>
     </div>
   );

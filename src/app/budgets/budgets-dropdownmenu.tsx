@@ -30,14 +30,30 @@ import {
 import z from "zod";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
 import { TBudget } from "@/data/getBudgets";
-import { deleteBudget } from "./actions";
+import { deleteBudget, editBudget } from "./actions";
+import BudgetsForm from "./budgets-form";
+import { InferSelectModel } from "drizzle-orm";
+import { categoriesTable } from "@/db/schema";
 
-export default function BudgetsDropdownMenu({ budget }: { budget: TBudget }) {
+export default function BudgetsDropdownMenu({
+  budget,
+  categories,
+}: {
+  budget: TBudget;
+  categories: InferSelectModel<typeof categoriesTable>[];
+}) {
   const router = useRouter();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  async function onEditBudget(data: z.infer<typeof budgetFormSchema>) {}
+  async function onEditBudget(data: z.infer<typeof budgetFormSchema>) {
+    const response = await editBudget(budget.id, data);
+
+    if (response.success) {
+      setEditDialogOpen(false);
+      router.refresh();
+    }
+  }
 
   async function onDeleteBudget() {
     await deleteBudget(budget.id);
@@ -66,6 +82,16 @@ export default function BudgetsDropdownMenu({ budget }: { budget: TBudget }) {
               As your budgets change, feel free to update your spending limits.
             </DialogDescription>
           </DialogHeader>
+          <BudgetsForm
+            onSubmit={onEditBudget}
+            categories={categories}
+            defaultValues={{
+              category: budget.category_id,
+              maximum: budget.maximum,
+              theme: budget.theme,
+            }}
+            submitButtonText="Save Changes"
+          />
         </DialogContent>
       </Dialog>
 

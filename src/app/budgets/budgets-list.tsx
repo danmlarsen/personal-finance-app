@@ -5,8 +5,14 @@ import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import BudgetsDropdownMenu from "./budgets-dropdownmenu";
+import { InferSelectModel } from "drizzle-orm";
+import { categoriesTable } from "@/db/schema";
 
-export default async function BudgetsList() {
+export default async function BudgetsList({
+  categories,
+}: {
+  categories: InferSelectModel<typeof categoriesTable>[];
+}) {
   const budgets = await getBudgets();
 
   return (
@@ -27,7 +33,7 @@ export default async function BudgetsList() {
                   />
                   <h2>{budget.name}</h2>
                 </div>
-                <BudgetsDropdownMenu budget={budget} />
+                <BudgetsDropdownMenu budget={budget} categories={categories} />
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">
