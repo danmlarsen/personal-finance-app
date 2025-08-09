@@ -23,33 +23,32 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
-import { createPot } from "./actions";
-import { useRouter } from "next/navigation";
 
-export default function PotsForm({ onSuccess }: { onSuccess?: () => void }) {
+export default function PotsForm({
+  onSubmit,
+  defaultValues,
+}: {
+  onSubmit: (data: z.infer<typeof potsFormSchema>) => Promise<void>;
+  defaultValues?: {
+    name: string;
+    target: string | number;
+    theme: string;
+  };
+}) {
   const form = useForm({
     resolver: zodResolver(potsFormSchema),
     defaultValues: {
       name: "",
       target: "",
       theme: "",
+      ...defaultValues,
     },
   });
-  const router = useRouter();
-
-  async function handleSubmit(data: z.infer<typeof potsFormSchema>) {
-    const response = await createPot(data);
-
-    if (response.success) {
-      router.refresh();
-      onSuccess?.();
-    }
-  }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleSubmit)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-4"
       >
         <FormField

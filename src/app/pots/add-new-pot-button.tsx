@@ -11,9 +11,23 @@ import {
 import PotsForm from "./pots-form";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import z from "zod";
+import { potsFormSchema } from "@/validation/potsFormSchema";
+import { createPot } from "./actions";
+import { useRouter } from "next/navigation";
 
 export default function AddNewPotButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+
+  async function handleSubmit(data: z.infer<typeof potsFormSchema>) {
+    const response = await createPot(data);
+
+    if (response.success) {
+      router.refresh();
+      setIsOpen(false);
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -28,7 +42,7 @@ export default function AddNewPotButton() {
             track as you save for special purchases.
           </DialogDescription>
         </DialogHeader>
-        <PotsForm onSuccess={() => setIsOpen(false)} />
+        <PotsForm onSubmit={handleSubmit} />
       </DialogContent>
     </Dialog>
   );
