@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { depositPot, withdrawPot } from "./actions";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   amount: z.coerce.number().positive(),
@@ -62,10 +63,10 @@ export default function PotsTransactionForm({
       : Math.max(potTotal - amount, 0);
 
   const currentPercent = Math.min((potTotal / potTarget) * 100, 100);
-  const amountPercent = Math.min(
-    (amount / potTarget) * 100,
-    100 - currentPercent,
-  );
+  const amountPercent =
+    transactionType === "deposit"
+      ? Math.min((amount / potTarget) * 100, 100 - currentPercent)
+      : Math.min((amount / potTotal) * 100, potTotal);
   const newPercent = Math.min((newAmount / potTarget) * 100, 100);
 
   return (
@@ -79,12 +80,15 @@ export default function PotsTransactionForm({
 
           <div className="flex h-2 gap-0.5 overflow-hidden rounded-md bg-amber-50">
             <div
-              className="flex h-2 justify-end overflow-hidden rounded-md bg-black"
+              className={cn(
+                "flex h-2 justify-end overflow-hidden bg-black",
+                transactionType === "withdraw" && "rounded-r-md",
+              )}
               style={{ width: `${currentPercent}%` }}
             >
               {transactionType === "withdraw" && (
                 <div
-                  className="h-2 bg-red-900"
+                  className="h-2 border-l-2 border-l-amber-50 bg-red-900"
                   style={{ width: `${amountPercent}%` }}
                 />
               )}
