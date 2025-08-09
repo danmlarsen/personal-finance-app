@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deletePot } from "./actions";
+import { deletePot, editPot } from "./actions";
 import { useRouter } from "next/navigation";
 import {
   AlertDialog,
@@ -17,11 +17,20 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { InferSelectModel } from "drizzle-orm";
 import { potsTable } from "@/db/schema";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import PotsForm from "./pots-form";
+import z from "zod";
+import { potsFormSchema } from "@/validation/potsFormSchema";
 
 export default function PotsDropdownMenu({
   pot,
@@ -29,7 +38,16 @@ export default function PotsDropdownMenu({
   pot: InferSelectModel<typeof potsTable>;
 }) {
   const router = useRouter();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  async function onEditPot(data: z.infer<typeof potsFormSchema>) {
+    await editPot(pot.id, {
+      ...data,
+      target: data.target.toString(),
+    });
+    router.refresh();
+  }
 
   async function onDeletePot() {
     await deletePot(pot.id);
@@ -41,12 +59,34 @@ export default function PotsDropdownMenu({
       <DropdownMenu>
         <DropdownMenuTrigger>...</DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem>Edit Pot</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
+            Edit Pot
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => setDeleteDialogOpen(true)}>
             Delete Pot
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Pot</DialogTitle>
+            <DialogDescription>
+              If your saving targets change, feel free to update your pots.
+            </DialogDescription>
+          </DialogHeader>
+          <PotsForm
+            onSubmit={onEditPot}
+            defaultValues={{
+              name: pot.name,
+              target: pot.target,
+              theme: pot.theme,
+            }}
+            submitButtonText="Save Changes"
+          />
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>

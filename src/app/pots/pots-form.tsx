@@ -27,6 +27,7 @@ import { z } from "zod";
 export default function PotsForm({
   onSubmit,
   defaultValues,
+  submitButtonText = "Add Pot",
 }: {
   onSubmit: (data: z.infer<typeof potsFormSchema>) => Promise<void>;
   defaultValues?: {
@@ -34,6 +35,7 @@ export default function PotsForm({
     target: string | number;
     theme: string;
   };
+  submitButtonText?: string;
 }) {
   const form = useForm({
     resolver: zodResolver(potsFormSchema),
@@ -105,7 +107,7 @@ export default function PotsForm({
           )}
         />
 
-        <Button type="submit">Add Pot</Button>
+        <Button type="submit">{submitButtonText}</Button>
       </form>
     </Form>
   );
