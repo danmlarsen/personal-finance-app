@@ -3,7 +3,7 @@ import { budgetsTable, categoriesTable, transactionsTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
 import "server-only";
 
-type TRecentTransaction = {
+export type TRecentTransaction = {
   id: number;
   name: string;
   amount: string;
@@ -11,7 +11,7 @@ type TRecentTransaction = {
   avatar: string;
 };
 
-type TBudget = {
+export type TBudget = {
   id: number;
   maximum: string;
   theme: string;

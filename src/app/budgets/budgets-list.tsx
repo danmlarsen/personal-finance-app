@@ -4,6 +4,7 @@ import { getBudgets } from "@/data/getBudgets";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
+import BudgetsDropdownMenu from "./budgets-dropdownmenu";
 
 export default async function BudgetsList() {
   const budgets = await getBudgets();
@@ -26,7 +27,7 @@ export default async function BudgetsList() {
                   />
                   <h2>{budget.name}</h2>
                 </div>
-                <div>...</div>
+                <BudgetsDropdownMenu budget={budget} />
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-muted-foreground">

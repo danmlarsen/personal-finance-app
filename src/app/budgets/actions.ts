@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { budgetsTable } from "@/db/schema";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
+import { eq } from "drizzle-orm";
 import z from "zod";
 
 export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
@@ -24,4 +25,8 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
   return {
     success: true,
   };
+}
+
+export async function deleteBudget(id: number) {
+  await db.delete(budgetsTable).where(eq(budgetsTable.id, id));
 }
