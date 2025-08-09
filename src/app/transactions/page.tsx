@@ -41,7 +41,7 @@ export default async function TransactionsPage({
       <h1>Transactions</h1>
       <Card>
         <CardHeader>
-          <TransactionsOptions categories={categories} />
+          <TransactionsOptions categories={categories.map((c) => c.name)} />
         </CardHeader>
         <CardContent>
           <TransactionsList transactions={transactions} />
