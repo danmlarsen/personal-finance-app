@@ -15,11 +15,17 @@ import { useRouter } from "next/navigation";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
 import BudgetsForm from "./budgets-form";
 
-export default function AddNewBudgetButton() {
+export default function AddNewBudgetButton({
+  categories,
+}: {
+  categories: string[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  async function handleSubmit(data: z.infer<typeof budgetFormSchema>) {}
+  async function handleSubmit(data: z.infer<typeof budgetFormSchema>) {
+    setIsOpen(false);
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -34,7 +40,7 @@ export default function AddNewBudgetButton() {
             help you monitor spending.
           </DialogDescription>
         </DialogHeader>
-        <BudgetsForm onSubmit={handleSubmit} />
+        <BudgetsForm onSubmit={handleSubmit} categories={categories} />
       </DialogContent>
     </Dialog>
   );
