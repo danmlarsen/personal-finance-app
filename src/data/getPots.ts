@@ -3,6 +3,6 @@ import { db } from "@/db";
 import { potsTable } from "@/db/schema";
 
 export async function getPots() {
-  const pots = await db.select().from(potsTable);
+  const pots = await db.select().from(potsTable).orderBy(potsTable.id);
   return pots;
 }
