@@ -1,6 +1,6 @@
 import AmountBar from "@/components/ui/amount-bar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getBudgets } from "@/data/getBudgets";
+import { getBudgets, TBudget } from "@/data/getBudgets";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,12 +9,12 @@ import { InferSelectModel } from "drizzle-orm";
 import { categoriesTable } from "@/db/schema";
 
 export default async function BudgetsList({
+  budgets,
   categories,
 }: {
+  budgets: TBudget[];
   categories: InferSelectModel<typeof categoriesTable>[];
 }) {
-  const budgets = await getBudgets();
-
   return (
     <ul className="space-y-10">
       {budgets.map((budget) => {

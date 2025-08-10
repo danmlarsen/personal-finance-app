@@ -3,9 +3,13 @@ import BudgetsSummary from "./budgets-summary";
 import BudgetsList from "./budgets-list";
 import AddNewBudgetButton from "./add-new-budget-button";
 import { getCategories } from "@/data/getCategories";
+import { getBudgets } from "@/data/getBudgets";
 
 export default async function BudgetsPage() {
-  const categories = await getCategories();
+  const [budgets, categories] = await Promise.all([
+    getBudgets(),
+    getCategories(),
+  ]);
 
   return (
     <div>
@@ -16,10 +20,10 @@ export default async function BudgetsPage() {
       <div className="grid gap-6 lg:grid-cols-[428px_1fr]">
         <Card>
           <CardContent>
-            <BudgetsSummary />
+            <BudgetsSummary budgets={budgets} />
           </CardContent>
         </Card>
-        <BudgetsList categories={categories} />
+        <BudgetsList budgets={budgets} categories={categories} />
       </div>
     </div>
   );
