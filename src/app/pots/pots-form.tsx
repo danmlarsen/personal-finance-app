@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { themeColors } from "@/data/themeColors";
 import { potsFormSchema } from "@/validation/potsFormSchema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,7 +43,7 @@ export default function PotsForm({
     defaultValues: {
       name: "",
       target: "",
-      theme: "",
+      theme: "#277C78",
       ...defaultValues,
     },
   });
@@ -99,8 +100,15 @@ export default function PotsForm({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="green">Green</SelectItem>
-                  <SelectItem value="blue">Blue</SelectItem>
+                  {themeColors.map((theme) => (
+                    <SelectItem key={theme.name} value={theme.hex}>
+                      <div
+                        className="size-4 rounded-full"
+                        style={{ backgroundColor: theme.hex }}
+                      />
+                      <div>{theme.name}</div>
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>
