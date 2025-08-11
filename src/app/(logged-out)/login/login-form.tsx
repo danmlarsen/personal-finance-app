@@ -10,42 +10,27 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signupFormSchema } from "@/validation/signupFormSchema";
+import { loginFormSchema } from "@/validation/loginFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
-export default function SignupForm() {
-  const form = useForm<z.infer<typeof signupFormSchema>>({
-    resolver: zodResolver(signupFormSchema),
+export default function LoginForm() {
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      passwordConfirm: "",
     },
   });
 
-  async function handleSubmit(data: z.infer<typeof signupFormSchema>) {
+  async function handleSubmit(data: z.infer<typeof loginFormSchema>) {
     console.log(data);
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="email"
@@ -64,20 +49,7 @@ export default function SignupForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Create Password</FormLabel>
-              <FormControl>
-                <Input {...field} type="password" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="passwordConfirm"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input {...field} type="password" />
               </FormControl>
@@ -86,7 +58,7 @@ export default function SignupForm() {
           )}
         />
         <Button type="submit" className="w-full">
-          Create Account
+          Login
         </Button>
       </form>
     </Form>
