@@ -4,6 +4,8 @@ import {
   integer,
   numeric,
   pgTable,
+  text,
+  timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
 
@@ -46,4 +48,12 @@ export const potsTable = pgTable("pots", {
   target: numeric().notNull(),
   total: numeric().notNull(),
   theme: varchar({ length: 10 }).notNull(),
+});
+
+export const usersTable = pgTable("users", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  name: varchar({ length: 255 }).notNull(),
+  email: varchar({ length: 255 }).unique().notNull(),
+  password: text().notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
 });
