@@ -14,6 +14,7 @@ import { signupFormSchema } from "@/validation/signupFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { registerUser } from "./actions";
 
 export default function SignupForm() {
   const form = useForm<z.infer<typeof signupFormSchema>>({
@@ -27,7 +28,8 @@ export default function SignupForm() {
   });
 
   async function handleSubmit(data: z.infer<typeof signupFormSchema>) {
-    console.log(data);
+    const response = await registerUser({ data });
+    console.log(response);
   }
 
   return (
