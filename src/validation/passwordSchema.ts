@@ -1,8 +1,10 @@
 import z from "zod";
 
 export const passwordSchema = z
-  .string()
-  .min(5, "Password must contain at least 5 characters");
+  .string("Password is required")
+  .min(1, "Password is required")
+  .min(5, "Password must contain at least 5 characters")
+  .max(32, "Password must be less than 32 characters");
 
 export const passwordMatchSchema = z
   .object({
