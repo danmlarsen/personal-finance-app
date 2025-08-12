@@ -3,6 +3,7 @@ import { Public_Sans } from "next/font/google";
 import "./globals.css";
 import MobileNav from "@/components/mobile-nav";
 import DesktopNav from "@/components/desktop-nav";
+import { Toaster } from "@/components/ui/sonner";
 
 const publicSans = Public_Sans({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ export default function RootLayout({
         </div>
 
         <MobileNav />
+        <Toaster />
       </body>
     </html>
   );
