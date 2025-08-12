@@ -10,7 +10,7 @@ import LoginForm from "./login-form";
 
 export default function LoginPage() {
   return (
-    <Card className="max-w-lg">
+    <Card className="w-full max-w-lg">
       <CardHeader>
         <CardTitle>Login</CardTitle>
       </CardHeader>
