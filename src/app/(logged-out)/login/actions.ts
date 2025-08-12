@@ -1,5 +1,6 @@
 "use server";
 
+import { signIn } from "@/auth";
 import { loginFormSchema } from "@/validation/loginFormSchema";
 import z from "zod";
 
@@ -19,7 +20,20 @@ export async function loginWithCredentials({
     };
   }
 
-  return {
-    success: true,
-  };
+  try {
+    await signIn("credentials", {
+      email: credentials.email,
+      password: credentials.password,
+      redirect: false,
+    });
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: "Incorrect email or password",
+    };
+  }
 }
