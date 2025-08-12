@@ -15,8 +15,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { loginWithCredentials } from "./actions";
+import { redirect, useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -27,7 +29,13 @@ export default function LoginForm() {
 
   async function handleSubmit(data: z.infer<typeof loginFormSchema>) {
     const response = await loginWithCredentials({ credentials: data });
-    console.log(response);
+
+    if (response.error) {
+    }
+
+    if (response.success) {
+      redirect("/");
+    }
   }
 
   return (

@@ -18,7 +18,7 @@ export default function LoginPage() {
         <LoginForm />
       </CardContent>
       <CardFooter>
-        Already have an account? <Link href="/signup">Sign Up</Link>
+        Need to create an account? <Link href="/signup">Sign Up</Link>
       </CardFooter>
     </Card>
   );
