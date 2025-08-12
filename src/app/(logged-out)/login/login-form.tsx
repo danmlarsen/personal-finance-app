@@ -31,6 +31,9 @@ export default function LoginForm() {
     const response = await loginWithCredentials({ credentials: data });
 
     if (response.error) {
+      form.setError("root", {
+        message: response.message,
+      });
     }
 
     if (response.success) {
@@ -67,6 +70,9 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
+        {!!form.formState.errors.root?.message && (
+          <FormMessage>{form.formState.errors.root.message}</FormMessage>
+        )}
         <Button type="submit" className="w-full">
           Login
         </Button>
