@@ -4,7 +4,7 @@ import { signupFormSchema } from "@/validation/signupFormSchema";
 import z from "zod";
 import { hash } from "bcryptjs";
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
+import { balanceTable, usersTable } from "@/db/schema";
 
 export async function registerUser({
   data,
@@ -24,21 +24,26 @@ export async function registerUser({
   try {
     const hashedPassword = await hash(data.password, 12);
 
-    const [user] = await db
-      .insert(usersTable)
-      .values({
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-      })
-      .returning();
+    await db.transaction(async (tx) => {
+      const [user] = await tx
+        .insert(usersTable)
+        .values({
+          name: data.name,
+          email: data.email,
+          password: hashedPassword,
+        })
+        .returning();
+
+      await tx.insert(balanceTable).values({
+        current: "5000",
+        income: "3814.25",
+        expenses: "1700.5",
+        userId: user.id,
+      });
+    });
 
     return {
       success: true,
-      user: {
-        id: user.id,
-        email: user.email,
-      },
     };
   } catch (e: any) {
     if (e?.cause?.code === "23505") {

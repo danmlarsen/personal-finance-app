@@ -4,10 +4,18 @@ import BudgetsList from "./budgets-list";
 import AddNewBudgetButton from "./add-new-budget-button";
 import { getCategories } from "@/data/getCategories";
 import { getBudgets } from "@/data/getBudgets";
+import { auth } from "@/auth";
+import { unauthorized } from "next/navigation";
 
 export default async function BudgetsPage() {
+  const session = await auth();
+  if (!session?.user?.id) {
+    unauthorized();
+  }
+  const userId = Number(session.user.id);
+
   const [budgets, categories] = await Promise.all([
-    getBudgets(),
+    getBudgets(userId),
     getCategories(),
   ]);
 

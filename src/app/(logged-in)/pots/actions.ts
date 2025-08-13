@@ -1,14 +1,22 @@
 "use server";
 
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { balanceTable, potsTable } from "@/db/schema";
 import { potsFormSchema } from "@/validation/potsFormSchema";
-import { eq, InferInsertModel, sql } from "drizzle-orm";
+import { and, eq, InferInsertModel, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export async function createPot(data: z.infer<typeof potsFormSchema>) {
-  const validation = z.safeParse(potsFormSchema, data);
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
 
+  const validation = z.safeParse(potsFormSchema, data);
   if (!validation.success) {
     return {
       error: true,
@@ -18,6 +26,7 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
 
   await db.insert(potsTable).values({
     ...data,
+    userId: Number(session.user.id),
     target: data.target.toString(),
     total: "0",
   });
@@ -29,10 +38,17 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
 
 export async function editPot(
   id: number,
-  data: Omit<InferInsertModel<typeof potsTable>, "total">,
+  data: z.infer<typeof potsFormSchema>,
 ) {
-  const validation = z.safeParse(potsFormSchema, data);
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
 
+  const validation = z.safeParse(potsFormSchema, data);
   if (!validation.success) {
     return {
       error: true,
@@ -44,16 +60,31 @@ export async function editPot(
     .update(potsTable)
     .set({
       ...data,
+      target: data.target.toString(),
     })
-    .where(eq(potsTable.id, id));
+    .where(
+      and(eq(potsTable.id, id), eq(potsTable.userId, Number(session.user.id))),
+    );
 }
 
 export async function deletePot(id: number) {
   await db.transaction(async (tx) => {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        error: true,
+        message: "Unauthorized",
+      };
+    }
     const [data] = await tx
       .select({ total: potsTable.total })
       .from(potsTable)
-      .where(eq(potsTable.id, id));
+      .where(
+        and(
+          eq(potsTable.id, id),
+          eq(potsTable.userId, Number(session.user.id)),
+        ),
+      );
 
     if (!data) {
       return {
@@ -64,31 +95,67 @@ export async function deletePot(id: number) {
 
     await tx
       .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} + ${data.total}` });
-    await tx.delete(potsTable).where(eq(potsTable.id, id));
+      .set({ current: sql`${balanceTable.current} + ${data.total}` })
+      .where(eq(balanceTable.userId, Number(session.user.id)));
+    await tx
+      .delete(potsTable)
+      .where(
+        and(
+          eq(potsTable.id, id),
+          eq(potsTable.userId, Number(session.user.id)),
+        ),
+      );
   });
 }
 
 export async function depositPot(id: number, amount: number) {
   await db.transaction(async (tx) => {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        error: true,
+        message: "Unauthorized",
+      };
+    }
+
     await tx
       .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} - ${amount}` });
+      .set({ current: sql`${balanceTable.current} - ${amount}` })
+      .where(eq(balanceTable.userId, Number(session.user.id)));
     await tx
       .update(potsTable)
       .set({ total: sql`${potsTable.total} + ${amount}` })
-      .where(eq(potsTable.id, id));
+      .where(
+        and(
+          eq(potsTable.id, id),
+          eq(potsTable.userId, Number(session.user.id)),
+        ),
+      );
   });
 }
 
 export async function withdrawPot(id: number, amount: number) {
   await db.transaction(async (tx) => {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return {
+        error: true,
+        message: "Unauthorized",
+      };
+    }
+
     await tx
       .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} + ${amount}` });
+      .set({ current: sql`${balanceTable.current} + ${amount}` })
+      .where(eq(balanceTable.userId, Number(session.user.id)));
     await tx
       .update(potsTable)
       .set({ total: sql`${potsTable.total} - ${amount}` })
-      .where(eq(potsTable.id, id));
+      .where(
+        and(
+          eq(potsTable.id, id),
+          eq(potsTable.userId, Number(session.user.id)),
+        ),
+      );
   });
 }

@@ -15,8 +15,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { registerUser } from "./actions";
+import { useRouter } from "next/navigation";
 
 export default function SignupForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -29,7 +31,16 @@ export default function SignupForm() {
 
   async function handleSubmit(data: z.infer<typeof signupFormSchema>) {
     const response = await registerUser({ data });
-    console.log(response);
+
+    if (response.error) {
+      form.setError("root", {
+        message: response.message,
+      });
+    }
+
+    if (response.success) {
+      router.push("/login");
+    }
   }
 
   return (
@@ -87,6 +98,9 @@ export default function SignupForm() {
             </FormItem>
           )}
         />
+        {!!form.formState.errors.root?.message && (
+          <FormMessage>{form.formState.errors.root.message}</FormMessage>
+        )}
         <Button type="submit" className="w-full">
           Create Account
         </Button>

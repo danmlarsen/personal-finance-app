@@ -11,10 +11,14 @@ import { getPots } from "@/data/getPots";
 import PotsDropdownMenu from "./pots-dropdown-menu";
 import PotsDepositButton from "./pots-deposit-button";
 import PotsWithdrawButton from "./pots-withdraw-button";
+import { InferSelectModel } from "drizzle-orm";
+import { potsTable } from "@/db/schema";
 
-export default async function PotsList() {
-  const pots = await getPots();
-
+export default async function PotsList({
+  pots,
+}: {
+  pots: InferSelectModel<typeof potsTable>[];
+}) {
   return (
     <ul className="grid gap-6 lg:grid-cols-2">
       {pots.map((pot) => {

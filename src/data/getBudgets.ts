@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { budgetsTable, categoriesTable, transactionsTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
@@ -14,6 +15,7 @@ export type TRecentTransaction = {
 export type TBudget = {
   id: number;
   category_id: number;
+  user_id: number;
   maximum: string;
   theme: string;
   name: string;
@@ -23,7 +25,7 @@ export type TBudget = {
 
 const CURRENT_MONTH = "2024-08-01";
 
-export async function getBudgets() {
+export async function getBudgets(userId: number) {
   const budgets = await db.execute<TBudget>(sql`
   SELECT 
     b.id,
@@ -45,6 +47,7 @@ export async function getBudgets() {
   FROM ${budgetsTable} b
   INNER JOIN ${categoriesTable} c ON b."category_id" = c.id
   LEFT JOIN ${transactionsTable} t ON t."category_id" = c.id AND t."created_at" >= ${CURRENT_MONTH}
+  WHERE b."user_id" = ${userId}
   GROUP BY b.id, c.id
 `);
 

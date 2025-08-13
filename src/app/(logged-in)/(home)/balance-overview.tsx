@@ -1,8 +1,19 @@
+import { auth } from "@/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { getBalance } from "@/data/getBalance";
+import { notFound, unauthorized } from "next/navigation";
 
 export default async function BalanceOverview() {
-  const balance = await getBalance();
+  const session = await auth();
+  if (!session?.user?.id) {
+    unauthorized();
+  }
+
+  const balance = await getBalance(Number(session.user.id));
+
+  if (!balance) {
+    notFound();
+  }
 
   return (
     <div className="grid gap-3 md:grid-cols-3">

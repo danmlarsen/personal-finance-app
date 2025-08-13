@@ -1,14 +1,22 @@
 "use server";
 
+import { auth } from "@/auth";
 import { db } from "@/db";
 import { budgetsTable } from "@/db/schema";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
-import { eq } from "drizzle-orm";
-import z, { success } from "zod";
+import { and, eq } from "drizzle-orm";
+import z from "zod";
 
 export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
-  const validation = z.safeParse(budgetFormSchema, data);
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
 
+  const validation = z.safeParse(budgetFormSchema, data);
   if (!validation.success) {
     return {
       error: true,
@@ -18,6 +26,7 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
 
   await db.insert(budgetsTable).values({
     categoryId: data.category,
+    userId: Number(session.user.id),
     maximum: data.maximum.toString(),
     theme: data.theme,
   });
@@ -31,8 +40,15 @@ export async function editBudget(
   id: number,
   data: z.infer<typeof budgetFormSchema>,
 ) {
-  const validation = z.safeParse(budgetFormSchema, data);
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
 
+  const validation = z.safeParse(budgetFormSchema, data);
   if (!validation.success) {
     return {
       error: true,
@@ -47,7 +63,12 @@ export async function editBudget(
       maximum: data.maximum.toString(),
       theme: data.theme,
     })
-    .where(eq(budgetsTable.id, id));
+    .where(
+      and(
+        eq(budgetsTable.id, id),
+        eq(budgetsTable.userId, Number(session.user.id)),
+      ),
+    );
 
   return {
     success: true,
@@ -55,5 +76,20 @@ export async function editBudget(
 }
 
 export async function deleteBudget(id: number) {
-  await db.delete(budgetsTable).where(eq(budgetsTable.id, id));
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
+
+  await db
+    .delete(budgetsTable)
+    .where(
+      and(
+        eq(budgetsTable.id, id),
+        eq(budgetsTable.userId, Number(session.user.id)),
+      ),
+    );
 }
