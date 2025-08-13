@@ -11,6 +11,9 @@ import {
 
 export const balanceTable = pgTable("balance", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id")
+    .references(() => usersTable.id, { onDelete: "cascade" })
+    .notNull(),
   current: numeric().default("0").notNull(),
   income: numeric().default("0").notNull(),
   expenses: numeric().default("0").notNull(),
@@ -38,12 +41,18 @@ export const budgetsTable = pgTable("budgets", {
   categoryId: integer("category_id")
     .references(() => categoriesTable.id)
     .notNull(),
+  userId: integer("user_id")
+    .references(() => usersTable.id, { onDelete: "cascade" })
+    .notNull(),
   maximum: numeric().default("0").notNull(),
   theme: varchar({ length: 10 }).notNull(),
 });
 
 export const potsTable = pgTable("pots", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: integer("user_id")
+    .references(() => usersTable.id, { onDelete: "cascade" })
+    .notNull(),
   name: varchar({ length: 255 }).notNull(),
   target: numeric().notNull(),
   total: numeric().notNull(),
