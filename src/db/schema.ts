@@ -6,18 +6,23 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   varchar,
 } from "drizzle-orm/pg-core";
 
-export const balanceTable = pgTable("balance", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer("user_id")
-    .references(() => usersTable.id, { onDelete: "cascade" })
-    .notNull(),
-  current: numeric().default("0").notNull(),
-  income: numeric().default("0").notNull(),
-  expenses: numeric().default("0").notNull(),
-});
+export const balanceTable = pgTable(
+  "balance",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    userId: integer("user_id")
+      .references(() => usersTable.id, { onDelete: "cascade" })
+      .notNull(),
+    current: numeric().default("0").notNull(),
+    income: numeric().default("0").notNull(),
+    expenses: numeric().default("0").notNull(),
+  },
+  (t) => [unique("uniqueBalancePerUser").on(t.id, t.userId)],
+);
 
 export const categoriesTable = pgTable("categories", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -36,28 +41,36 @@ export const transactionsTable = pgTable("transactions", {
   recurring: boolean().notNull(),
 });
 
-export const budgetsTable = pgTable("budgets", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  categoryId: integer("category_id")
-    .references(() => categoriesTable.id)
-    .notNull(),
-  userId: integer("user_id")
-    .references(() => usersTable.id, { onDelete: "cascade" })
-    .notNull(),
-  maximum: numeric().default("0").notNull(),
-  theme: varchar({ length: 10 }).notNull(),
-});
+export const budgetsTable = pgTable(
+  "budgets",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    categoryId: integer("category_id")
+      .references(() => categoriesTable.id)
+      .notNull(),
+    userId: integer("user_id")
+      .references(() => usersTable.id, { onDelete: "cascade" })
+      .notNull(),
+    maximum: numeric().default("0").notNull(),
+    theme: varchar({ length: 10 }).notNull(),
+  },
+  (t) => [unique("uniqueCategoryPerUser").on(t.categoryId, t.userId)],
+);
 
-export const potsTable = pgTable("pots", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  userId: integer("user_id")
-    .references(() => usersTable.id, { onDelete: "cascade" })
-    .notNull(),
-  name: varchar({ length: 255 }).notNull(),
-  target: numeric().notNull(),
-  total: numeric().notNull(),
-  theme: varchar({ length: 10 }).notNull(),
-});
+export const potsTable = pgTable(
+  "pots",
+  {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    userId: integer("user_id")
+      .references(() => usersTable.id, { onDelete: "cascade" })
+      .notNull(),
+    name: varchar({ length: 255 }).notNull(),
+    target: numeric().notNull(),
+    total: numeric().notNull(),
+    theme: varchar({ length: 10 }).notNull(),
+  },
+  (t) => [unique("uniqueNamePerUser").on(t.name, t.userId)],
+);
 
 export const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
