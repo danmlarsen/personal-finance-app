@@ -31,9 +31,10 @@ async function getCategories() {
   return db.select().from(categoriesTable);
 }
 
-async function insertBalance() {
+export async function insertBalance(userId: number) {
   await db.insert(balanceTable).values([
     {
+      userId: userId,
       current: data.balance.current.toString(),
       income: data.balance.income.toString(),
       expenses: data.balance.expenses.toString(),
@@ -60,12 +61,16 @@ async function insertTransactions(categories: { id: number; name: string }[]) {
   await db.insert(transactionsTable).values(transactionsData);
 }
 
-async function insertBudgets(categories: { id: number; name: string }[]) {
+async function insertBudgets(
+  categories: { id: number; name: string }[],
+  userId: number,
+) {
   const budgetsData = data.budgets.map((budget) => {
     const categoryId = categories.find((c) => c.name === budget.category)!.id;
 
     return {
       categoryId,
+      userId,
       maximum: budget.maximum.toString(),
       theme: budget.theme,
     };
@@ -74,24 +79,25 @@ async function insertBudgets(categories: { id: number; name: string }[]) {
   await db.insert(budgetsTable).values(budgetsData);
 }
 
-async function insertPots() {
+async function insertPots(userId: number) {
   const potsData = data.pots.map((pot) => ({
     name: pot.name,
     target: pot.target.toString(),
     total: pot.total.toString(),
     theme: pot.theme,
+    userId,
   }));
 
   await db.insert(potsTable).values(potsData);
 }
 
 async function main() {
-  await insertBalance();
-  await insertCategories();
+  await insertBalance(1);
+  // await insertCategories();
   const categories = await getCategories();
-  await insertTransactions(categories);
-  await insertBudgets(categories);
-  await insertPots();
+  // await insertTransactions(categories);
+  await insertBudgets(categories, 1);
+  await insertPots(1);
 }
 
 main();
