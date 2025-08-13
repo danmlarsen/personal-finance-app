@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { db } from "@/db";
 import { budgetsTable, categoriesTable, transactionsTable } from "@/db/schema";
 import { sql } from "drizzle-orm";

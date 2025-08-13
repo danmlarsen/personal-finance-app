@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { db } from "@/db";
 import { balanceTable, potsTable } from "@/db/schema";
 import { potsFormSchema } from "@/validation/potsFormSchema";
-import { and, eq, InferInsertModel, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
 export async function createPot(data: z.infer<typeof potsFormSchema>) {
