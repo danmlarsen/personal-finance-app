@@ -1,11 +1,19 @@
+import { auth } from "@/auth";
 import DesktopNav from "@/components/desktop-nav";
 import MobileNav from "@/components/mobile-nav";
+import { redirect } from "next/navigation";
 
-export default function LoggedInLayout({
+export default async function LoggedInLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    redirect("/login");
+  }
+
   return (
     <>
       <div className="grid min-h-screen lg:grid-cols-[auto_1fr]">
