@@ -2,7 +2,9 @@ import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getPots } from "@/data/getPots";
+import Image from "next/image";
 import Link from "next/link";
+import IconPot from "@/assets/images/icon-pot.svg";
 
 export default async function PotsOverview() {
   const session = await auth();
@@ -21,16 +23,25 @@ export default async function PotsOverview() {
           <Link href="/pots">See Details</Link>
         </Button>
       </CardHeader>
-      <CardContent className="grid grid-cols-[247px_1fr]">
-        <div>
-          <p>Total Saved</p>
-          <p>${totalSaved}</p>
+      <CardContent className="grid gap-5 md:grid-cols-[247px_1fr]">
+        <div className="flex items-center gap-4 rounded-md bg-amber-50 p-4">
+          <Image src={IconPot} alt="Pot icon" />
+          <div>
+            <p className="text-muted-foreground">Total Saved</p>
+            <p className="text-3xl font-bold">${totalSaved}</p>
+          </div>
         </div>
-        <ul className="grid grid-cols-2">
+        <ul className="grid grid-cols-2 gap-4">
           {pots.slice(0, 4).map((pot) => (
-            <li key={pot.id}>
-              <p>{pot.name}</p>
-              <p>{pot.total}</p>
+            <li key={pot.id} className="flex items-center gap-4">
+              <div
+                className="h-full w-1 rounded-full"
+                style={{ backgroundColor: pot.theme }}
+              />
+              <div>
+                <p className="text-muted-foreground text-xs">{pot.name}</p>
+                <p className="text-sm">${pot.total}</p>
+              </div>
             </li>
           ))}
         </ul>

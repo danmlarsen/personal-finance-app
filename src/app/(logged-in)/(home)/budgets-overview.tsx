@@ -20,9 +20,11 @@ export default async function BudgetsOverview() {
           <Link href="/budgets">See Details</Link>
         </Button>
       </CardHeader>
-      <CardContent className="grid grid-cols-[1fr_101px]">
-        <BudgetsPieChart budgets={budgets} />
-        <ul className="grid gap-4">
+      <CardContent className="grid items-center md:grid-cols-[1fr_101px]">
+        <div className="min-h-[302px]">
+          <BudgetsPieChart budgets={budgets} />
+        </div>
+        <ul className="grid grid-cols-2 gap-4 md:grid-cols-1">
           {budgets.slice(0, 4).map((budget) => (
             <li
               key={budget.id}
