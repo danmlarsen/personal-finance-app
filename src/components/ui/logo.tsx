@@ -1,6 +1,12 @@
-export default function Logo({ variant = "lg" }: { variant?: "sm" | "lg" }) {
+import { cn } from "@/lib/utils";
+
+export default function Logo({
+  variant = "lg",
+  className,
+  ...props
+}: React.ComponentProps<"div"> & { variant?: "sm" | "lg" }) {
   return (
-    <div>
+    <div className={cn("", className)} {...props}>
       {variant === "lg" && (
         <svg
           fill="none"
