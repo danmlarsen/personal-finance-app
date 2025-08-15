@@ -37,8 +37,8 @@ export default async function TransactionsPage({
   const numPages = Math.ceil(totalNumTransactions / 10);
 
   return (
-    <div>
-      <h1>Transactions</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Transactions</h1>
       <Card>
         <CardHeader>
           <TransactionsOptions categories={categories.map((c) => c.name)} />

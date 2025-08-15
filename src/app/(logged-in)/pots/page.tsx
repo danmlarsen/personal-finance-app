@@ -14,9 +14,9 @@ export default async function PotsPage() {
   const pots = await getPots(userId);
 
   return (
-    <div>
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1>Pots</h1>
+        <h1 className="text-3xl font-bold">Pots</h1>
         <AddNewPotButton />
       </div>
       <PotsList pots={pots} />

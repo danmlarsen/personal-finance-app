@@ -1,5 +1,5 @@
 import AmountBar from "@/components/ui/amount-bar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getBudgets, TBudget } from "@/data/getBudgets";
 import { format } from "date-fns";
 import Image from "next/image";
@@ -31,7 +31,7 @@ export default async function BudgetsList({
                     className="size-4 rounded-full"
                     style={{ backgroundColor: budget.theme }}
                   />
-                  <h2>{budget.name}</h2>
+                  <CardTitle>{budget.name}</CardTitle>
                 </div>
                 <BudgetsDropdownMenu budget={budget} categories={categories} />
               </CardHeader>

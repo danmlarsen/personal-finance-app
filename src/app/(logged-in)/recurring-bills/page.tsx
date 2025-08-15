@@ -7,10 +7,8 @@ export default async function RecurringBillsPage() {
   const recurringBills = await getRecurringBills();
 
   return (
-    <div>
-      <div>
-        <h1>Recurring Bills</h1>
-      </div>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Recurring Bills</h1>
       <div className="grid gap-6 lg:grid-cols-[337px_1fr]">
         <RecurringBillsSummary recurringBills={recurringBills} />
         <Card>

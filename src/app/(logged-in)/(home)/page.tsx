@@ -6,8 +6,8 @@ import TransactionsOverview from "./transactions-overview";
 
 export default function Home() {
   return (
-    <div className="space-y-6">
-      <h1>Overview</h1>
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Overview</h1>
       <BalanceOverview />
       <PotsOverview />
       <TransactionsOverview />
