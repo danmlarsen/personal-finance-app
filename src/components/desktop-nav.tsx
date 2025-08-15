@@ -4,6 +4,8 @@ import { useState } from "react";
 import Logo from "./ui/logo";
 import { cn } from "@/lib/utils";
 import Navigation from "./navigation";
+import { Button } from "./ui/button";
+import IconMinimizeMenu from "./ui/svg/icon-minimize-menu";
 
 export default function DesktopNav() {
   const [isMinimized, setIsMinimized] = useState(false);
@@ -13,7 +15,7 @@ export default function DesktopNav() {
       <div className={cn("hidden w-[300px] lg:block", isMinimized && "w-20")} />
       <div
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-10 hidden w-[300px] grid-rows-[auto_1fr_auto] rounded-r-xl bg-black pr-6 text-white lg:grid",
+          "fixed top-0 bottom-0 left-0 z-10 hidden w-[300px] grid-rows-[auto_1fr_auto] rounded-r-xl bg-black pr-6 pb-6 text-white lg:grid",
           isMinimized && "w-20 pr-0",
         )}
       >
@@ -21,9 +23,19 @@ export default function DesktopNav() {
           <Logo variant={isMinimized ? "sm" : "lg"} />
         </div>
         <Navigation variant={isMinimized ? "sm" : "lg"} />
-        <button onClick={() => setIsMinimized((isMinimized) => !isMinimized)}>
-          minimize
-        </button>
+        <Button
+          variant="ghost"
+          onClick={() => setIsMinimized((isMinimized) => !isMinimized)}
+          className="h-14 gap-4 font-bold"
+        >
+          {!isMinimized && (
+            <>
+              <IconMinimizeMenu />
+              <span>Minimize Menu</span>
+            </>
+          )}
+          {!!isMinimized && <IconMinimizeMenu className="rotate-180" />}
+        </Button>
       </div>
     </>
   );
