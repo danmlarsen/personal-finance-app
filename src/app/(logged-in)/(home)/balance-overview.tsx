@@ -17,7 +17,7 @@ export default async function BalanceOverview() {
 
   return (
     <div className="grid gap-3 md:grid-cols-3">
-      <Card className="bg-black text-white">
+      <Card className="bg-grey-900 text-white">
         <CardContent className="space-y-2 p-5">
           <p>Current Balance</p>
           <p className="text-3xl font-bold">

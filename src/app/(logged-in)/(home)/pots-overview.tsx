@@ -24,7 +24,7 @@ export default async function PotsOverview() {
         </Button>
       </CardHeader>
       <CardContent className="grid gap-5 md:grid-cols-[247px_1fr]">
-        <div className="flex items-center gap-4 rounded-md bg-amber-50 p-4">
+        <div className="bg-beige-100 flex items-center gap-4 rounded-md p-4">
           <Image src={IconPot} alt="Pot icon" />
           <div>
             <p className="text-muted-foreground">Total Saved</p>

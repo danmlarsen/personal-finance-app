@@ -19,7 +19,7 @@ export default function Navigation({
               <Button
                 asChild
                 className={cn(
-                  "h-11 w-full flex-col bg-black sm:h-16 lg:flex-row lg:justify-start lg:gap-4 lg:rounded-none lg:rounded-r-xl lg:pl-8",
+                  "bg-grey-900 h-11 w-full flex-col sm:h-16 lg:flex-row lg:justify-start lg:gap-4 lg:rounded-none lg:rounded-r-xl lg:pl-8",
                   variant === "sm" && "lg:justify-center lg:pl-0",
                 )}
                 size="nav"

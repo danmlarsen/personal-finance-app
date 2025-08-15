@@ -56,7 +56,7 @@ export default async function RecurringBillsOverview() {
           {recurringBillsRows.map((bill, idx) => (
             <li
               key={idx}
-              className="flex items-center justify-between rounded-md border-l-4 bg-amber-50 px-4 py-5"
+              className="bg-beige-100 flex items-center justify-between rounded-md border-l-4 px-4 py-5"
               style={{ borderLeftColor: themeColors[idx].hex }}
             >
               <p>{bill.title}</p>
