@@ -63,7 +63,11 @@ export default async function BudgetsList({
                 <Card className="bg-beige-100 border-none shadow-none">
                   <CardHeader className="flex items-center justify-between">
                     <h3>Latest Spending</h3>
-                    <Link href="#">See All</Link>
+                    <Link
+                      href={`/transactions/?category=${budget.name.toLowerCase()}`}
+                    >
+                      See All
+                    </Link>
                   </CardHeader>
                   <CardContent>
                     <ul className="divide-y divide-amber-200">
