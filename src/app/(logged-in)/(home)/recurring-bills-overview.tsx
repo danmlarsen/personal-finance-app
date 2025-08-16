@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
 import { getRecurringBills } from "@/data/getRecurringBills";
 import { themeColors } from "@/data/themeColors";
 import { getRecurringBillsSummary } from "@/lib/utils";
@@ -18,8 +19,11 @@ export default async function RecurringBillsOverview() {
     <Card>
       <CardHeader className="flex items-center justify-between">
         <CardTitle>Recurring Bills</CardTitle>
-        <Button asChild>
-          <Link href="/recurring-bills">See Details</Link>
+        <Button asChild variant="ghost">
+          <Link href="/recurring-bills">
+            <span>See Details</span>
+            <IconCaretRight />
+          </Link>
         </Button>
       </CardHeader>
       <CardContent>

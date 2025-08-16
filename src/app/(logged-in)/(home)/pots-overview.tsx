@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import IconPot from "@/assets/images/icon-pot.svg";
 import numeral from "numeral";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
 
 export default async function PotsOverview() {
   const session = await auth();
@@ -20,8 +21,11 @@ export default async function PotsOverview() {
     <Card>
       <CardHeader className="flex items-center justify-between">
         <CardTitle>Pots</CardTitle>
-        <Button asChild>
-          <Link href="/pots">See Details</Link>
+        <Button asChild variant="ghost">
+          <Link href="/pots">
+            <span>See Details</span>
+            <IconCaretRight />
+          </Link>
         </Button>
       </CardHeader>
       <CardContent className="grid gap-5 md:grid-cols-[247px_1fr]">

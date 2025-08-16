@@ -5,6 +5,7 @@ import { getBudgets } from "@/data/getBudgets";
 import Link from "next/link";
 import BudgetsPieChart from "../budgets/budgets-pie-chart";
 import numeral from "numeral";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
 
 export default async function BudgetsOverview() {
   const session = await auth();
@@ -17,8 +18,11 @@ export default async function BudgetsOverview() {
     <Card>
       <CardHeader className="flex items-center justify-between">
         <CardTitle>Budgets</CardTitle>
-        <Button asChild>
-          <Link href="/budgets">See Details</Link>
+        <Button asChild variant="ghost">
+          <Link href="/budgets">
+            <span>See Details</span>
+            <IconCaretRight />
+          </Link>
         </Button>
       </CardHeader>
       <CardContent className="grid items-center md:grid-cols-[1fr_101px]">

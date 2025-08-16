@@ -6,7 +6,7 @@ export default function IconCaretLeft({
 }: React.ComponentProps<"svg">) {
   return (
     <svg
-      className={cn("", className)}
+      className={cn("size-3", className)}
       fill="none"
       height="11"
       viewBox="0 0 6 11"

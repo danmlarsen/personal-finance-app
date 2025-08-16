@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
 import { getTransactions } from "@/data/getTransactions";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
@@ -14,8 +15,11 @@ export default async function TransactionsOverview() {
     <Card>
       <CardHeader className="flex items-center justify-between">
         <CardTitle>Transactions</CardTitle>
-        <Button asChild>
-          <Link href="/transactions">View All</Link>
+        <Button asChild variant="ghost">
+          <Link href="/transactions">
+            <span>View All</span>
+            <IconCaretRight />
+          </Link>
         </Button>
       </CardHeader>
       <CardContent>
