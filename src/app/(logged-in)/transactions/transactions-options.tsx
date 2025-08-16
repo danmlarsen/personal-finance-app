@@ -87,7 +87,7 @@ export default function TransactionsOptions({
             )}
           />
 
-          <div className="flex gap-6 md:gap-8">
+          <div className="flex md:gap-8">
             <FormField
               control={form.control}
               name="sortby"

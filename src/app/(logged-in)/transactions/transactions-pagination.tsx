@@ -1,6 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import IconCaretLeft from "@/components/ui/svg/icon-caret-left";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -23,11 +26,17 @@ export default function TransactionsPagination({
   if (sortBy) newSearchParams.set("sortby", sortBy);
   if (category) newSearchParams.set("category", category);
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   return (
     <div className="grid grid-cols-[auto_1fr_auto]">
       <Button variant="outline" asChild={curPage > 1} disabled={curPage <= 1}>
-        <Link href={`/transactions?page=${curPage > 1 ? curPage - 1 : 1}`}>
-          Prev
+        <Link
+          href={`/transactions?page=${curPage > 1 ? curPage - 1 : 1}`}
+          className="flex items-center gap-4"
+        >
+          <IconCaretLeft className="text-grey-500" />
+          <span className="hidden md:inline">Prev</span>
         </Link>
       </Button>
       <div className="flex justify-center gap-2">
@@ -35,12 +44,19 @@ export default function TransactionsPagination({
           const pageNum = idx + 1;
           newSearchParams.set("page", pageNum.toString());
 
+          if (
+            isMobile &&
+            pageNum !== curPage &&
+            pageNum !== 1 &&
+            pageNum !== numPages
+          )
+            return;
+
           return (
             <Button
-              variant="outline"
+              variant={curPage === pageNum ? "default" : "outline"}
               key={idx}
               asChild={curPage !== pageNum}
-              disabled={curPage === pageNum}
             >
               <Link href={`/transactions?${newSearchParams.toString()}`}>
                 {pageNum}
@@ -56,8 +72,10 @@ export default function TransactionsPagination({
       >
         <Link
           href={`/transactions?page=${curPage < numPages ? curPage + 1 : numPages}`}
+          className="flex items-center gap-4"
         >
-          Next
+          <span className="hidden md:inline">Next</span>
+          <IconCaretRight className="text-grey-500" />
         </Link>
       </Button>
     </div>
