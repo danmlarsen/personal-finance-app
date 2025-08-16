@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { Card, CardContent } from "@/components/ui/card";
 import { getBalance } from "@/data/getBalance";
 import { notFound, unauthorized } from "next/navigation";
+import numeral from "numeral";
 
 export default async function BalanceOverview() {
   const session = await auth();
@@ -19,25 +20,25 @@ export default async function BalanceOverview() {
     <div className="grid gap-3 md:grid-cols-3">
       <Card className="bg-grey-900 text-white">
         <CardContent className="space-y-2 p-5">
-          <p>Current Balance</p>
+          <p className="text-sm">Current Balance</p>
           <p className="text-3xl font-bold">
-            ${Number(balance.current).toFixed(2)}
+            {numeral(balance.current).format("$0,0.00")}
           </p>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="space-y-2 p-5">
-          <p>Income</p>
+          <p className="text-muted-foreground text-sm">Income</p>
           <p className="text-3xl font-bold">
-            ${Number(balance.income).toFixed(2)}
+            {numeral(balance.income).format("$0,0.00")}
           </p>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="space-y-2 p-5">
-          <p>Expenses</p>
+          <p className="text-muted-foreground text-sm">Expenses</p>
           <p className="text-3xl font-bold">
-            ${Number(balance.expenses).toFixed(2)}
+            {numeral(balance.expenses).format("$0,0.00")}
           </p>
         </CardContent>
       </Card>

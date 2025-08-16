@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getBudgets } from "@/data/getBudgets";
 import Link from "next/link";
 import BudgetsPieChart from "../budgets/budgets-pie-chart";
+import numeral from "numeral";
 
 export default async function BudgetsOverview() {
   const session = await auth();
@@ -34,8 +35,10 @@ export default async function BudgetsOverview() {
                 className="row-span-2 w-1 rounded-md"
                 style={{ backgroundColor: budget.theme }}
               />
-              <p>{budget.name}</p>
-              <p>{budget.maximum}</p>
+              <p className="text-muted-foreground">{budget.name}</p>
+              <p className="font-bold">
+                {numeral(budget.maximum).format("$0,0.00")}
+              </p>
             </li>
           ))}
         </ul>

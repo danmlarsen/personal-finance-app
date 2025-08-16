@@ -5,6 +5,7 @@ import { getPots } from "@/data/getPots";
 import Image from "next/image";
 import Link from "next/link";
 import IconPot from "@/assets/images/icon-pot.svg";
+import numeral from "numeral";
 
 export default async function PotsOverview() {
   const session = await auth();
@@ -26,9 +27,11 @@ export default async function PotsOverview() {
       <CardContent className="grid gap-5 md:grid-cols-[247px_1fr]">
         <div className="bg-beige-100 flex items-center gap-4 rounded-md p-4">
           <Image src={IconPot} alt="Pot icon" />
-          <div>
+          <div className="space-y-3">
             <p className="text-muted-foreground">Total Saved</p>
-            <p className="text-3xl font-bold">${totalSaved}</p>
+            <p className="text-3xl font-bold">
+              {numeral(totalSaved).format("$0,0")}
+            </p>
           </div>
         </div>
         <ul className="grid grid-cols-2 gap-4">
@@ -40,7 +43,9 @@ export default async function PotsOverview() {
               />
               <div>
                 <p className="text-muted-foreground text-xs">{pot.name}</p>
-                <p className="text-sm">${pot.total}</p>
+                <p className="text-sm font-bold">
+                  {numeral(pot.total).format("$0,0")}
+                </p>
               </div>
             </li>
           ))}

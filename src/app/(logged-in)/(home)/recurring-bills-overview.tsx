@@ -4,6 +4,7 @@ import { getRecurringBills } from "@/data/getRecurringBills";
 import { themeColors } from "@/data/themeColors";
 import { getRecurringBillsSummary } from "@/lib/utils";
 import Link from "next/link";
+import numeral from "numeral";
 
 export default async function RecurringBillsOverview() {
   const recurringBills = await getRecurringBills();
@@ -22,15 +23,17 @@ export default async function RecurringBillsOverview() {
         </Button>
       </CardHeader>
       <CardContent>
-        <ul className="space-y-4">
+        <ul className="space-y-4 text-sm">
           {billsSummary.map((bill, idx) => (
             <li
               key={idx}
               className="bg-beige-100 flex items-center justify-between rounded-md border-l-4 px-4 py-5"
               style={{ borderLeftColor: themeColors[idx].hex }}
             >
-              <p>{bill.title}</p>
-              <p>${bill.totalSum.toFixed(2)}</p>
+              <p className="text-muted-foreground">{bill.title}</p>
+              <p className="font-bold">
+                {numeral(bill.totalSum).format("$0,0.00")}
+              </p>
             </li>
           ))}
         </ul>
