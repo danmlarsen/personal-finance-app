@@ -20,12 +20,12 @@ export default async function BudgetsPage() {
   ]);
 
   return (
-    <div className="space-y-8">
+    <div className="@container space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Budgets</h1>
         <AddNewBudgetButton categories={categories} />
       </div>
-      <div className="grid gap-6 lg:grid-cols-[428px_1fr]">
+      <div className="grid items-start gap-6 @4xl:grid-cols-[428px_1fr]">
         <Card>
           <CardContent>
             <BudgetsSummary budgets={budgets} />
