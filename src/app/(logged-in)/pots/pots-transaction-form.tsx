@@ -78,7 +78,7 @@ export default function PotsTransactionForm({
             <p>${newAmount || potTotal}</p>
           </div>
 
-          <div className="flex h-2 gap-0.5 overflow-hidden rounded-md bg-amber-50">
+          <div className="bg-beige-100 flex h-2 gap-0.5 overflow-hidden rounded-md">
             <div
               className={cn(
                 "flex h-2 justify-end overflow-hidden bg-black",
@@ -88,14 +88,14 @@ export default function PotsTransactionForm({
             >
               {transactionType === "withdraw" && (
                 <div
-                  className="h-2 border-l-2 border-l-amber-50 bg-red-900"
+                  className="border-l-beige-100 h-2 border-l-2 bg-red-500"
                   style={{ width: `${amountPercent}%` }}
                 />
               )}
             </div>
             {transactionType === "deposit" && (
               <div
-                className="h-2 rounded-r-md bg-green-900"
+                className="h-2 rounded-r-md bg-green-500"
                 style={{ width: `${amountPercent}%` }}
               />
             )}
