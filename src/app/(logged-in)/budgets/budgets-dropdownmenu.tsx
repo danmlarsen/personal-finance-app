@@ -75,7 +75,7 @@ export default function BudgetsDropdownMenu({
       </DropdownMenu>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
+        <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Edit Budget</DialogTitle>
             <DialogDescription>

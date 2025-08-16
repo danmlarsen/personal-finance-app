@@ -66,7 +66,7 @@ export default function PotsDropdownMenu({
       </DropdownMenu>
 
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent>
+        <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Edit Pot</DialogTitle>
             <DialogDescription>

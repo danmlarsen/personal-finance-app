@@ -26,7 +26,7 @@ export default function PotsDepositButton({
       <DialogTrigger asChild>
         <Button>+ Add Money</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Add to {pot.name}</DialogTitle>
           <DialogDescription>

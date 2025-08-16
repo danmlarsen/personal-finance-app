@@ -34,7 +34,7 @@ export default function AddNewPotButton() {
       <DialogTrigger asChild>
         <Button>+ Add New Pot</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Add New Pot</DialogTitle>
           <DialogDescription>

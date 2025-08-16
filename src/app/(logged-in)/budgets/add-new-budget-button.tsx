@@ -40,7 +40,7 @@ export default function AddNewBudgetButton({
       <DialogTrigger asChild>
         <Button>+ Add New Budget</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Add New Budget</DialogTitle>
           <DialogDescription>
