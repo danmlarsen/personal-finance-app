@@ -16,12 +16,6 @@ export default function RecurringBillsList({
 }: {
   recurringBills: TRecurringBill[];
 }) {
-  const sortedRecurringBills = recurringBills.sort((a, b) => {
-    const monthA = new Date(a.created_at).getDate();
-    const monthB = new Date(b.created_at).getDate();
-    return monthA - monthB;
-  });
-
   // const isMobile = useMediaQuery("(max-width: 600px)");
 
   // if (isMobile) {
@@ -44,7 +38,7 @@ export default function RecurringBillsList({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {sortedRecurringBills.map((bill, idx) => {
+        {recurringBills.map((bill, idx) => {
           return (
             <TableRow key={`${bill.name}_${idx}`}>
               <TableCell>
