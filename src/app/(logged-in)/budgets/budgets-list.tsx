@@ -60,7 +60,7 @@ export default async function BudgetsList({
                   </div>
                 </div>
 
-                <Card className="border-none bg-amber-50 shadow-none">
+                <Card className="bg-beige-100 border-none shadow-none">
                   <CardHeader className="flex items-center justify-between">
                     <h3>Latest Spending</h3>
                     <Link href="#">See All</Link>
