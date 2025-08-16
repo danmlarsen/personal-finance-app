@@ -16,7 +16,7 @@ export default function TransactionTitle({
         height={40}
         className="rounded-full"
       />
-      <span>{title}</span>
+      <span className="font-bold">{title}</span>
     </div>
   );
 }

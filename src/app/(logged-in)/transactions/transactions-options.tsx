@@ -19,6 +19,10 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
+import Image from "next/image";
+import IconSortMobile from "@/assets/images/icon-sort-mobile.svg";
+import IconFilterMobile from "@/assets/images/icon-filter-mobile.svg";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const formSchema = z.object({
   transactionName: z.string().optional(),
@@ -33,6 +37,8 @@ export default function TransactionsOptions({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,13 +87,13 @@ export default function TransactionsOptions({
             )}
           />
 
-          <div className="flex gap-8">
+          <div className="flex gap-6 md:gap-8">
             <FormField
               control={form.control}
               name="sortby"
               render={({ field }) => (
                 <FormItem className="flex gap-2">
-                  <FormLabel>Sort by</FormLabel>
+                  <FormLabel className="hidden md:flex">Sort by</FormLabel>
                   <Select
                     defaultValue={field.value}
                     onValueChange={(value) => {
@@ -95,9 +101,19 @@ export default function TransactionsOptions({
                       form.handleSubmit(handleSubmit)();
                     }}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger isIcon={isMobile}>
+                      {!isMobile && <SelectValue />}
+                      {isMobile && (
+                        <Image
+                          src={IconSortMobile}
+                          alt="Sort icon"
+                          width={20}
+                          height={20}
+                          className="size-5"
+                        />
+                      )}
                     </SelectTrigger>
+
                     <SelectContent>
                       <SelectItem value="latest">Latest</SelectItem>
                       <SelectItem value="oldest">Oldest</SelectItem>
@@ -116,7 +132,7 @@ export default function TransactionsOptions({
               name="category"
               render={({ field }) => (
                 <FormItem className="flex gap-2">
-                  <FormLabel>Category</FormLabel>
+                  <FormLabel className="hidden md:flex">Category</FormLabel>
                   <Select
                     defaultValue={field.value}
                     onValueChange={(value) => {
@@ -124,11 +140,20 @@ export default function TransactionsOptions({
                       form.handleSubmit(handleSubmit)();
                     }}
                   >
-                    <SelectTrigger>
-                      <SelectValue />
+                    <SelectTrigger isIcon={isMobile}>
+                      {!isMobile && <SelectValue />}
+                      {isMobile && (
+                        <Image
+                          src={IconFilterMobile}
+                          alt="Filter icon"
+                          width={20}
+                          height={20}
+                          className="size-5"
+                        />
+                      )}
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All</SelectItem>
+                      <SelectItem value="all">All Transactions</SelectItem>
                       {categories.map((category) => (
                         <SelectItem
                           key={category}
