@@ -1,66 +1,64 @@
 import { Card, CardContent } from "@/components/ui/card";
 
 import { type TRecurringBill } from "@/data/getRecurringBills";
-import { isPast, isSameMonth } from "date-fns";
+import IconRecurringBills from "@/assets/images/icon-recurring-bills.svg";
+import Image from "next/image";
+import { cn, getRecurringBillsSummary } from "@/lib/utils";
 
 export default function RecurringBillsSummary({
   recurringBills,
+  latestTransactionDate = new Date(2024, 7, 19).toString(),
 }: {
   recurringBills: TRecurringBill[];
+  latestTransactionDate?: string;
 }) {
-  const today = new Date(2024, 7, 12);
-
   const totalBillsAmount = recurringBills.reduce(
     (total, transaction) => Math.abs(Number(transaction.amount)) + total,
     0,
   );
 
-  const paidBills = recurringBills.filter((transaction) => {
-    const transactionDate = new Date(transaction.created_at);
-    return isSameMonth(today, transactionDate) && isPast(transactionDate);
-  });
-  const paidBillsAmount = paidBills.reduce(
-    (total, transaction) => Math.abs(Number(transaction.amount)) + total,
-    0,
-  );
-
-  const totalUpcoming = recurringBills.filter((transaction) => {
-    const transactionDate = new Date(transaction.created_at);
-    return transactionDate.getDate() > today.getDate();
-  });
-  const totalUpcomingAmount = totalUpcoming.reduce(
-    (total, transaction) => Math.abs(Number(transaction.amount)) + total,
-    0,
+  const billsSummary = getRecurringBillsSummary(
+    recurringBills,
+    latestTransactionDate,
   );
 
   return (
-    <div>
-      <Card>
-        <CardContent>
-          <p>Total Bills</p>
-          <p>${totalBillsAmount}</p>
+    <div className="flex flex-col gap-6 md:flex-row lg:flex-col">
+      <Card className="bg-grey-900 w-full text-white">
+        <CardContent className="space-y-3">
+          <Image
+            src={IconRecurringBills}
+            alt="Recurring bills"
+            className="mb-8"
+          />
+          <p className="text-sm">Total Bills</p>
+          <p className="text-3xl font-bold">${totalBillsAmount}</p>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="w-full">
         <CardContent>
-          <p>Summary</p>
-          <ul>
-            <li className="flex justify-between">
-              <p>Paid Bills</p>
-              <p>
-                {paidBills.length}(${paidBillsAmount.toFixed(2)})
-              </p>
-            </li>
-            <li className="flex justify-between">
-              <p>Total Upcoming</p>
-              <p>
-                {totalUpcoming.length}(${totalUpcomingAmount.toFixed(2)})
-              </p>
-            </li>
-            <li className="flex justify-between">
-              <p>Due Soon</p>
-              <p></p>
-            </li>
+          <p className="mb-5 font-bold">Summary</p>
+          <ul className="divide-beige-100 divide-y text-xs">
+            {billsSummary.map((summary) => (
+              <li key={summary.title} className="flex justify-between py-4">
+                <p
+                  className={cn(
+                    "text-muted-foreground",
+                    summary.title === "Due Soon" && "text-red-500",
+                  )}
+                >
+                  {summary.title}
+                </p>
+                <p
+                  className={cn(
+                    "font-bold",
+                    summary.title === "Due Soon" && "text-red-500",
+                  )}
+                >
+                  {summary.amount} (${summary.totalSum.toFixed(2)})
+                </p>
+              </li>
+            ))}
           </ul>
         </CardContent>
       </Card>
