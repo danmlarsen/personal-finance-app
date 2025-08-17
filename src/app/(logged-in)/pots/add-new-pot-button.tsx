@@ -32,7 +32,7 @@ export default function AddNewPotButton() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>+ Add New Pot</Button>
+        <Button size="lg">+ Add New Pot</Button>
       </DialogTrigger>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
