@@ -19,7 +19,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${publicSans.className} bg-beige-100 antialiased`}>
+      <body
+        className={`${publicSans.className} bg-beige-100 text-grey-900 antialiased`}
+      >
         {children}
         <Toaster />
       </body>
