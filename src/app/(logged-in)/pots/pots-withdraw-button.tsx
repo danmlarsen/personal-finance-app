@@ -24,7 +24,9 @@ export default function PotsWithdrawButton({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Withdraw</Button>
+        <Button variant="secondary" size="lg">
+          Withdraw
+        </Button>
       </DialogTrigger>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>

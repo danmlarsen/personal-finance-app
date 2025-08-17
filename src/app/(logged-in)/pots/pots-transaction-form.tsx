@@ -124,7 +124,7 @@ export default function PotsTransactionForm({
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" size="lg">
           Confirm {transactionType}
         </Button>
       </form>

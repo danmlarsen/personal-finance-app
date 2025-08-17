@@ -115,7 +115,9 @@ export default function PotsForm({
           )}
         />
 
-        <Button type="submit">{submitButtonText}</Button>
+        <Button type="submit" size="lg">
+          {submitButtonText}
+        </Button>
       </form>
     </Form>
   );

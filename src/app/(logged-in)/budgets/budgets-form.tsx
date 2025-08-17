@@ -125,7 +125,7 @@ export default function BudgetsForm({
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" size="lg">
           {submitButtonText}
         </Button>
       </form>
