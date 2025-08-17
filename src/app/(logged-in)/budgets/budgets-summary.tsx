@@ -3,10 +3,12 @@ import BudgetsPieChart from "./budgets-pie-chart";
 
 export default function BudgetsSummary({ budgets }: { budgets: TBudget[] }) {
   return (
-    <div>
-      <BudgetsPieChart budgets={budgets} />
+    <div className="grid gap-8 md:grid-cols-[minmax(280px,1fr)_1fr] lg:grid-cols-1">
       <div>
-        <h2>Spending Summary</h2>
+        <BudgetsPieChart budgets={budgets} />
+      </div>
+      <div className="space-y-6">
+        <h2 className="text-xl font-bold">Spending Summary</h2>
         <ul className="space-y-8">
           {budgets.map((budget) => (
             <li key={budget.id} className="flex gap-4">
