@@ -4,6 +4,7 @@ import { asc, desc, eq, sql } from "drizzle-orm";
 import "server-only";
 
 export type TRecurringBill = {
+  id: number;
   name: string;
   amount: string;
   created_at: string;
