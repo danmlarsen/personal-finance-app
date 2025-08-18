@@ -31,6 +31,8 @@ import {
 import PotsForm from "./pots-form";
 import z from "zod";
 import { potsFormSchema } from "@/validation/potsFormSchema";
+import IconElipsis from "@/components/ui/svg/icon-elipsis";
+import { Button } from "@/components/ui/button";
 
 export default function PotsDropdownMenu({
   pot,
@@ -54,8 +56,15 @@ export default function PotsDropdownMenu({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>...</DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="text-grey-300 hover:bg-transparent"
+          >
+            <IconElipsis />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
             Edit Pot
           </DropdownMenuItem>

@@ -34,6 +34,8 @@ import { deleteBudget, editBudget } from "./actions";
 import BudgetsForm from "./budgets-form";
 import { InferSelectModel } from "drizzle-orm";
 import { categoriesTable } from "@/db/schema";
+import { Button } from "@/components/ui/button";
+import IconElipsis from "@/components/ui/svg/icon-elipsis";
 
 export default function BudgetsDropdownMenu({
   budget,
@@ -63,8 +65,15 @@ export default function BudgetsDropdownMenu({
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>...</DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="text-grey-300 hover:bg-transparent"
+          >
+            <IconElipsis />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setEditDialogOpen(true)}>
             Edit Budget
           </DropdownMenuItem>
