@@ -13,6 +13,7 @@ import PotsDepositButton from "./pots-deposit-button";
 import PotsWithdrawButton from "./pots-withdraw-button";
 import { InferSelectModel } from "drizzle-orm";
 import { potsTable } from "@/db/schema";
+import numeral from "numeral";
 
 export default async function PotsList({
   pots,
@@ -24,7 +25,7 @@ export default async function PotsList({
       {pots.map((pot) => {
         const potTotal = Number(pot.total);
         const potTarget = Number(pot.target);
-        const percentSaved = Math.min((potTotal / potTarget) * 100, 100);
+        const percentSaved = Math.min(potTotal / potTarget, 100);
 
         return (
           <li key={pot.name}>
@@ -41,17 +42,22 @@ export default async function PotsList({
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <p>Total Saved</p>
-                  <p className="text-3xl font-bold">${potTotal.toFixed(2)}</p>
+                  <p className="text-muted-foreground text-sm">Total Saved</p>
+                  <p className="text-3xl font-bold">
+                    {numeral(potTotal).format("$0,0.00")}
+                  </p>
                 </div>
                 <AmountBar
                   amount={potTotal}
                   max={potTarget}
                   themeColor={pot.theme}
+                  className="h-2"
                 />
-                <div className="flex items-center justify-between">
-                  <p>{percentSaved.toFixed(2)}%</p>
-                  <p>Target of ${potTarget}</p>
+                <div className="text-muted-foreground flex items-center justify-between text-xs">
+                  <p className="font-bold">
+                    {numeral(percentSaved).format("0.0[0]%")}
+                  </p>
+                  <p>Target of {numeral(potTarget).format("$0,0")}</p>
                 </div>
               </CardContent>
               <CardFooter className="grid grid-cols-2 gap-4">
