@@ -7,6 +7,9 @@ import Link from "next/link";
 import BudgetsDropdownMenu from "./budgets-dropdownmenu";
 import { InferSelectModel } from "drizzle-orm";
 import { categoriesTable } from "@/db/schema";
+import { Button } from "@/components/ui/button";
+import IconCaretRight from "@/components/ui/svg/icon-caret-right";
+import numeral from "numeral";
 
 export default async function BudgetsList({
   budgets,
@@ -36,65 +39,74 @@ export default async function BudgetsList({
                 <BudgetsDropdownMenu budget={budget} categories={categories} />
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  Maximum of ${Number(budget.maximum).toFixed(2)}
+                <p className="text-muted-foreground text-sm">
+                  Maximum of {numeral(budget.maximum).format("$0,0.00")}
                 </p>
                 <AmountBar
                   amount={spentAmount}
                   max={maximumAmount}
                   themeColor={budget.theme}
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4">
                     <div
                       className="row-span-2 w-1 rounded-md"
                       style={{ backgroundColor: budget.theme }}
                     />
-                    <div>Spent</div>
-                    <div>${spentAmount}</div>
+                    <div className="text-muted-foreground text-xs">Spent</div>
+                    <div className="font-bold">
+                      {numeral(spentAmount).format("$0,0")}
+                    </div>
                   </div>
                   <div className="grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4">
-                    <div className="row-span-2 w-1 rounded-md bg-amber-50" />
-                    <div>Remaining</div>
-                    <div>${remainingAmount}</div>
+                    <div className="bg-beige-100 row-span-2 w-1 rounded-md" />
+                    <div className="text-muted-foreground text-xs">
+                      Remaining
+                    </div>
+                    <div className="font-bold">
+                      {numeral(remainingAmount).format("$0,0")}
+                    </div>
                   </div>
                 </div>
 
-                <Card className="bg-beige-100 border-none shadow-none">
-                  <CardHeader className="flex items-center justify-between">
-                    <h3>Latest Spending</h3>
-                    <Link
-                      href={`/transactions/?category=${budget.name.toLowerCase()}`}
-                    >
-                      See All
-                    </Link>
+                <Card className="bg-beige-100 gap-3 border-none pb-2 shadow-none">
+                  <CardHeader className="flex items-center justify-between px-5">
+                    <h3 className="font-bold">Latest Spending</h3>
+                    <Button asChild variant="ghost">
+                      <Link
+                        href={`/transactions/?category=${budget.name.toLowerCase()}`}
+                      >
+                        <span>See All</span>
+                        <IconCaretRight />
+                      </Link>
+                    </Button>
                   </CardHeader>
-                  <CardContent>
-                    <ul className="divide-y divide-amber-200">
+                  <CardContent className="px-5">
+                    <ul className="divide-grey-500/15 divide-y">
                       {budget.recentTransactions?.map((transaction) => {
                         const transactionAmount = Number(transaction.amount);
 
                         return (
-                          <li key={transaction.id}>
-                            <div className="flex justify-between py-3">
-                              <div className="flex items-center gap-4">
-                                <Image
-                                  src={transaction.avatar}
-                                  alt=""
-                                  width={32}
-                                  height={32}
-                                  className="rounded-full"
-                                />
-                                <span>{transaction.name}</span>
+                          <li
+                            key={transaction.id}
+                            className="flex justify-between py-3 text-xs"
+                          >
+                            <div className="flex items-center gap-4 font-bold">
+                              <Image
+                                src={transaction.avatar}
+                                alt={transaction.name}
+                                width={32}
+                                height={32}
+                                className="rounded-full"
+                              />
+                              <span>{transaction.name}</span>
+                            </div>
+                            <div className="text-end">
+                              <div className="font-bold">
+                                {numeral(transactionAmount).format("$0,0.00")}
                               </div>
-                              <div className="text-end">
-                                <div>${transactionAmount}</div>
-                                <div>
-                                  {format(
-                                    transaction.created_at,
-                                    "dd MMM yyyy",
-                                  )}
-                                </div>
+                              <div className="text-muted-foreground">
+                                {format(transaction.created_at, "dd MMM yyyy")}
                               </div>
                             </div>
                           </li>
