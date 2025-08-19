@@ -51,7 +51,7 @@ export default async function PotsList({
                   amount={potTotal}
                   max={potTarget}
                   themeColor={pot.theme}
-                  className="h-2"
+                  className="h-2 p-0"
                 />
                 <div className="text-muted-foreground flex items-center justify-between text-xs">
                   <p className="font-bold">
