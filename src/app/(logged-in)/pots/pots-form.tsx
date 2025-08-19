@@ -25,6 +25,8 @@ import { useForm } from "react-hook-form";
 
 import { z } from "zod";
 
+const NAME_MAXLENGTH = 30;
+
 export default function PotsForm({
   onSubmit,
   defaultValues,
@@ -61,8 +63,16 @@ export default function PotsForm({
             <FormItem>
               <FormLabel>Pot Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="e.g. Rainy Days" />
+                <Input
+                  {...field}
+                  placeholder="e.g. Rainy Days"
+                  maxLength={NAME_MAXLENGTH}
+                />
               </FormControl>
+              <div className="text-muted-foreground text-end text-xs">
+                {Math.max(NAME_MAXLENGTH - field.value.length, 0)} characters
+                left
+              </div>
               <FormMessage />
             </FormItem>
           )}
