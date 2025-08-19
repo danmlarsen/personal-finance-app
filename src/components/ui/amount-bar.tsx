@@ -16,7 +16,7 @@ export default function AmountBar({
 
   return (
     <div
-      className={cn("bg-beige-100 grid h-8 rounded-sm", className)}
+      className={cn("bg-beige-100 grid h-8 rounded-sm p-1", className)}
       {...props}
     >
       <div
