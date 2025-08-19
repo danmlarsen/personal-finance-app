@@ -82,6 +82,7 @@ export default function PotsForm({
                   value={field.value as number | string}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
