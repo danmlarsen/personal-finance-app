@@ -1,6 +1,6 @@
 import AmountBar from "@/components/ui/amount-bar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getBudgets, TBudget } from "@/data/getBudgets";
+import { type TBudget } from "@/data/getBudgets";
 import { format } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";

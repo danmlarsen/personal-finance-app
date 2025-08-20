@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InferSelectModel } from "drizzle-orm";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { useBudgetsContext } from "./budgets-context";
 
 export default function BudgetsForm({
   onSubmit,
@@ -35,12 +36,22 @@ export default function BudgetsForm({
   defaultValues?: { category: number; maximum: string; theme: string };
   submitButtonText?: string;
 }) {
+  const budgets = useBudgetsContext();
+  const alreadyUsedColors = budgets.map((b) => b.theme);
+  const alreadyUsedCategories = budgets.map((b) => b.category_id);
+  const availableCategories = categories.filter(
+    (c) => !alreadyUsedCategories.includes(c.id),
+  );
+  const availableColors = themeColors.filter(
+    (c) => !alreadyUsedColors.includes(c.hex),
+  );
+
   const form = useForm({
     resolver: zodResolver(budgetFormSchema),
     defaultValues: {
-      category: 0,
+      category: availableCategories[0]?.id || 0,
       maximum: "",
-      theme: "#277C78",
+      theme: availableColors?.[0].hex || "#277C78",
       ...defaultValues,
     },
   });
@@ -69,6 +80,14 @@ export default function BudgetsForm({
                     <SelectItem
                       key={category.id}
                       value={category.id.toString()}
+                      disabled={
+                        alreadyUsedCategories.includes(category.id) &&
+                        category.id !== defaultValues?.category
+                      }
+                      isUsed={
+                        alreadyUsedCategories.includes(category.id) &&
+                        category.id !== defaultValues?.category
+                      }
                     >
                       {category.name}
                     </SelectItem>
@@ -111,7 +130,18 @@ export default function BudgetsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {themeColors.map((theme) => (
-                    <SelectItem key={theme.name} value={theme.hex}>
+                    <SelectItem
+                      key={theme.name}
+                      value={theme.hex}
+                      disabled={
+                        alreadyUsedColors.includes(theme.hex) &&
+                        theme.hex !== field.value
+                      }
+                      isUsed={
+                        alreadyUsedColors.includes(theme.hex) &&
+                        theme.hex !== field.value
+                      }
+                    >
                       <div
                         className="size-4 rounded-full"
                         style={{ backgroundColor: theme.hex }}

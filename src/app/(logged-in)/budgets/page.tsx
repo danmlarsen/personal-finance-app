@@ -6,6 +6,7 @@ import { getCategories } from "@/data/getCategories";
 import { getBudgets } from "@/data/getBudgets";
 import { auth } from "@/auth";
 import { unauthorized } from "next/navigation";
+import { BudgetsContextProvider } from "./budgets-context";
 
 export default async function BudgetsPage() {
   const session = await auth();
@@ -20,19 +21,21 @@ export default async function BudgetsPage() {
   ]);
 
   return (
-    <div className="@container space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Budgets</h1>
-        <AddNewBudgetButton categories={categories} />
+    <BudgetsContextProvider value={budgets}>
+      <div className="@container space-y-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Budgets</h1>
+          <AddNewBudgetButton categories={categories} />
+        </div>
+        <div className="grid items-start gap-6 @5xl:grid-cols-[428px_1fr]">
+          <Card>
+            <CardContent>
+              <BudgetsSummary budgets={budgets} />
+            </CardContent>
+          </Card>
+          <BudgetsList budgets={budgets} categories={categories} />
+        </div>
       </div>
-      <div className="grid items-start gap-6 @5xl:grid-cols-[428px_1fr]">
-        <Card>
-          <CardContent>
-            <BudgetsSummary budgets={budgets} />
-          </CardContent>
-        </Card>
-        <BudgetsList budgets={budgets} categories={categories} />
-      </div>
-    </div>
+    </BudgetsContextProvider>
   );
 }
