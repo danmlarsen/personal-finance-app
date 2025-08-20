@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { z } from "zod";
+import { usePotsContext } from "./pots-context";
 
 const NAME_MAXLENGTH = 30;
 
@@ -40,12 +41,18 @@ export default function PotsForm({
   };
   submitButtonText?: string;
 }) {
+  const pots = usePotsContext();
+  const alreadyUsedColors = pots.map((p) => p.theme);
+  const availableColors = themeColors.filter(
+    (c) => !alreadyUsedColors.includes(c.hex),
+  );
+
   const form = useForm({
     resolver: zodResolver(potsFormSchema),
     defaultValues: {
       name: "",
       target: "",
-      theme: "#277C78",
+      theme: availableColors?.[0].hex || "#277C78",
       ...defaultValues,
     },
   });
@@ -112,7 +119,18 @@ export default function PotsForm({
                 </SelectTrigger>
                 <SelectContent>
                   {themeColors.map((theme) => (
-                    <SelectItem key={theme.name} value={theme.hex}>
+                    <SelectItem
+                      key={theme.name}
+                      value={theme.hex}
+                      disabled={
+                        alreadyUsedColors.includes(theme.hex) &&
+                        theme.hex !== defaultValues?.theme
+                      }
+                      isUsed={
+                        alreadyUsedColors.includes(theme.hex) &&
+                        theme.hex !== defaultValues?.theme
+                      }
+                    >
                       <div
                         className="size-4 rounded-full"
                         style={{ backgroundColor: theme.hex }}

@@ -44,8 +44,12 @@ export default function PotsDropdownMenu({
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   async function onEditPot(data: z.infer<typeof potsFormSchema>) {
-    await editPot(pot.id, data);
-    router.refresh();
+    const response = await editPot(pot.id, data);
+
+    if (response.success) {
+      setEditDialogOpen(false);
+      router.refresh();
+    }
   }
 
   async function onDeletePot() {

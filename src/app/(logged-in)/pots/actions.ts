@@ -65,6 +65,10 @@ export async function editPot(
     .where(
       and(eq(potsTable.id, id), eq(potsTable.userId, Number(session.user.id))),
     );
+
+  return {
+    success: true,
+  };
 }
 
 export async function deletePot(id: number) {

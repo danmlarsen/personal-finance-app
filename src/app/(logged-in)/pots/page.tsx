@@ -3,6 +3,7 @@ import AddNewPotButton from "./add-new-pot-button";
 import { getPots } from "@/data/getPots";
 import { unauthorized } from "next/navigation";
 import { auth } from "@/auth";
+import { PotsContextProvider } from "./pots-context";
 
 export default async function PotsPage() {
   const session = await auth();
@@ -14,12 +15,14 @@ export default async function PotsPage() {
   const pots = await getPots(userId);
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Pots</h1>
-        <AddNewPotButton />
+    <PotsContextProvider value={pots}>
+      <div className="space-y-8">
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold">Pots</h1>
+          <AddNewPotButton />
+        </div>
+        <PotsList pots={pots} />
       </div>
-      <PotsList pots={pots} />
-    </div>
+    </PotsContextProvider>
   );
 }
