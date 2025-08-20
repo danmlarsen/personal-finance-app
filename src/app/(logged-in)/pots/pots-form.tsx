@@ -14,6 +14,7 @@ import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -25,6 +26,7 @@ import { useForm } from "react-hook-form";
 
 import { z } from "zod";
 import { usePotsContext } from "./pots-context";
+import { Fragment } from "react";
 
 const NAME_MAXLENGTH = 30;
 
@@ -69,7 +71,7 @@ export default function PotsForm({
           control={form.control}
           name="name"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="mb-5">
               <FormLabel>Pot Name</FormLabel>
               <FormControl>
                 <Input
@@ -78,11 +80,13 @@ export default function PotsForm({
                   maxLength={NAME_MAXLENGTH}
                 />
               </FormControl>
-              <div className="text-muted-foreground text-end text-xs">
-                {Math.max(NAME_MAXLENGTH - field.value.length, 0)} characters
-                left
+              <div className="relative">
+                <FormMessage />
+                <div className="text-muted-foreground absolute top-1 right-0 text-end text-xs">
+                  {Math.max(NAME_MAXLENGTH - field.value.length, 0)} characters
+                  left
+                </div>
               </div>
-              <FormMessage />
             </FormItem>
           )}
         />
@@ -115,25 +119,27 @@ export default function PotsForm({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {themeColors.map((theme) => (
-                    <SelectItem
-                      key={theme.name}
-                      value={theme.hex}
-                      disabled={
-                        alreadyUsedColors.includes(theme.hex) &&
-                        theme.hex !== defaultValues?.theme
-                      }
-                      isUsed={
-                        alreadyUsedColors.includes(theme.hex) &&
-                        theme.hex !== defaultValues?.theme
-                      }
-                    >
-                      <div
-                        className="size-4 rounded-full"
-                        style={{ backgroundColor: theme.hex }}
-                      />
-                      <div>{theme.name}</div>
-                    </SelectItem>
+                  {themeColors.map((theme, idx) => (
+                    <Fragment key={theme.name}>
+                      <SelectItem
+                        value={theme.hex}
+                        disabled={
+                          alreadyUsedColors.includes(theme.hex) &&
+                          theme.hex !== defaultValues?.theme
+                        }
+                        isUsed={
+                          alreadyUsedColors.includes(theme.hex) &&
+                          theme.hex !== defaultValues?.theme
+                        }
+                      >
+                        <div
+                          className="size-4 rounded-full"
+                          style={{ backgroundColor: theme.hex }}
+                        />
+                        <div>{theme.name}</div>
+                      </SelectItem>
+                      {idx < themeColors.length - 1 && <SelectSeparator />}
+                    </Fragment>
                   ))}
                 </SelectContent>
               </Select>
@@ -143,7 +149,7 @@ export default function PotsForm({
 
         {submitErrorText && <FormMessage>{submitErrorText}</FormMessage>}
 
-        <Button type="submit" size="lg">
+        <Button type="submit" size="lg" className="mt-1">
           {submitButtonText}
         </Button>
       </form>
