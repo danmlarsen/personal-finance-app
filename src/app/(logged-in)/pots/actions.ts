@@ -20,20 +20,34 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
   if (!validation.success) {
     return {
       error: true,
-      message: validation.error.issues,
+      message: validation.error.issues[0].message ?? "An error occurred",
     };
   }
 
-  await db.insert(potsTable).values({
-    ...data,
-    userId: Number(session.user.id),
-    target: data.target.toString(),
-    total: "0",
-  });
+  try {
+    await db.insert(potsTable).values({
+      ...data,
+      userId: Number(session.user.id),
+      target: data.target.toString(),
+      total: "0",
+    });
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (e: any) {
+    if (e?.cause?.code === "23505") {
+      return {
+        error: true,
+        message: "A pot with that name already exists",
+      };
+    }
+
+    return {
+      error: true,
+      message: "An error occurred",
+    };
+  }
 }
 
 export async function editPot(
@@ -56,60 +70,89 @@ export async function editPot(
     };
   }
 
-  await db
-    .update(potsTable)
-    .set({
-      ...data,
-      target: data.target.toString(),
-    })
-    .where(
-      and(eq(potsTable.id, id), eq(potsTable.userId, Number(session.user.id))),
-    );
+  try {
+    await db
+      .update(potsTable)
+      .set({
+        ...data,
+        target: data.target.toString(),
+      })
+      .where(
+        and(
+          eq(potsTable.id, id),
+          eq(potsTable.userId, Number(session.user.id)),
+        ),
+      );
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (e: any) {
+    if (e?.cause?.code === "23505") {
+      return {
+        error: true,
+        message: "A pot with that name already exists",
+      };
+    }
+
+    return {
+      error: true,
+      message: "An error occurred",
+    };
+  }
 }
 
 export async function deletePot(id: number) {
-  await db.transaction(async (tx) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return {
-        error: true,
-        message: "Unauthorized",
-      };
-    }
-    const [data] = await tx
-      .select({ total: potsTable.total })
-      .from(potsTable)
-      .where(
-        and(
-          eq(potsTable.id, id),
-          eq(potsTable.userId, Number(session.user.id)),
-        ),
-      );
+  try {
+    await db.transaction(async (tx) => {
+      const session = await auth();
+      if (!session?.user?.id) {
+        return {
+          error: true,
+          message: "Unauthorized",
+        };
+      }
 
-    if (!data) {
-      return {
-        error: true,
-        message: "Unable to fetch pot data",
-      };
-    }
+      const [data] = await tx
+        .select({ total: potsTable.total })
+        .from(potsTable)
+        .where(
+          and(
+            eq(potsTable.id, id),
+            eq(potsTable.userId, Number(session.user.id)),
+          ),
+        );
 
-    await tx
-      .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} + ${data.total}` })
-      .where(eq(balanceTable.userId, Number(session.user.id)));
-    await tx
-      .delete(potsTable)
-      .where(
-        and(
-          eq(potsTable.id, id),
-          eq(potsTable.userId, Number(session.user.id)),
-        ),
-      );
-  });
+      if (!data) {
+        return {
+          error: true,
+          message: "Unable to fetch pot data",
+        };
+      }
+
+      await tx
+        .update(balanceTable)
+        .set({ current: sql`${balanceTable.current} + ${data.total}` })
+        .where(eq(balanceTable.userId, Number(session.user.id)));
+      await tx
+        .delete(potsTable)
+        .where(
+          and(
+            eq(potsTable.id, id),
+            eq(potsTable.userId, Number(session.user.id)),
+          ),
+        );
+    });
+
+    return {
+      success: true,
+    };
+  } catch (e: any) {
+    return {
+      error: true,
+      message: "An error occurred",
+    };
+  }
 }
 
 export async function depositPot(id: number, amount: number) {

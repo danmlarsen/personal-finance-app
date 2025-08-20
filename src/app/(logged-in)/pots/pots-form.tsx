@@ -32,14 +32,16 @@ export default function PotsForm({
   onSubmit,
   defaultValues,
   submitButtonText = "Add Pot",
+  submitErrorText,
 }: {
   onSubmit: (data: z.infer<typeof potsFormSchema>) => Promise<void>;
   defaultValues?: {
     name: string;
-    target: string | number;
+    target: string;
     theme: string;
   };
   submitButtonText?: string;
+  submitErrorText?: string;
 }) {
   const pots = usePotsContext();
   const alreadyUsedColors = pots.map((p) => p.theme);
@@ -92,12 +94,7 @@ export default function PotsForm({
             <FormItem>
               <FormLabel>Target</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="e.g. 2000"
-                  type="number"
-                  value={field.value as number | string}
-                />
+                <Input {...field} placeholder="e.g. 2000" type="number" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -143,6 +140,8 @@ export default function PotsForm({
             </FormItem>
           )}
         />
+
+        {submitErrorText && <FormMessage>{submitErrorText}</FormMessage>}
 
         <Button type="submit" size="lg">
           {submitButtonText}

@@ -33,6 +33,8 @@ import z from "zod";
 import { potsFormSchema } from "@/validation/potsFormSchema";
 import IconElipsis from "@/components/ui/svg/icon-elipsis";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import numeral from "numeral";
 
 export default function PotsDropdownMenu({
   pot,
@@ -40,20 +42,37 @@ export default function PotsDropdownMenu({
   pot: InferSelectModel<typeof potsTable>;
 }) {
   const router = useRouter();
+  const [editSubmitErrorText, setEditSubmitErrorText] = useState("");
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   async function onEditPot(data: z.infer<typeof potsFormSchema>) {
+    setEditSubmitErrorText("");
     const response = await editPot(pot.id, data);
 
     if (response.success) {
       setEditDialogOpen(false);
       router.refresh();
     }
+
+    if (response.error) {
+      setEditSubmitErrorText(response.message);
+    }
   }
 
   async function onDeletePot() {
-    await deletePot(pot.id);
+    const response = await deletePot(pot.id);
+
+    if (response.success) {
+      toast.success(
+        `Successfully deleted ${pot.name} and transfered ${numeral(pot.total).format("$0,0.00")} back to balance`,
+      );
+    }
+
+    if (response.error) {
+      toast.error(`An error occurred deleting pot ${pot.name}`);
+    }
+
     router.refresh();
   }
 
@@ -94,6 +113,7 @@ export default function PotsDropdownMenu({
               theme: pot.theme,
             }}
             submitButtonText="Save Changes"
+            submitErrorText={editSubmitErrorText}
           />
         </DialogContent>
       </Dialog>

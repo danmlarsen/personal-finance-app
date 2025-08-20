@@ -18,14 +18,20 @@ import { useRouter } from "next/navigation";
 
 export default function AddNewPotButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const [submitError, setSubmitErrorText] = useState("");
   const router = useRouter();
 
   async function handleSubmit(data: z.infer<typeof potsFormSchema>) {
+    setSubmitErrorText("");
     const response = await createPot(data);
 
     if (response.success) {
       router.refresh();
       setIsOpen(false);
+    }
+
+    if (response.error) {
+      setSubmitErrorText(response.message);
     }
   }
 
@@ -42,7 +48,7 @@ export default function AddNewPotButton() {
             track as you save for special purchases.
           </DialogDescription>
         </DialogHeader>
-        <PotsForm onSubmit={handleSubmit} />
+        <PotsForm onSubmit={handleSubmit} submitErrorText={submitError} />
       </DialogContent>
     </Dialog>
   );
