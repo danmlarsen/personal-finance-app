@@ -8,7 +8,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { potsTable } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InferSelectModel } from "drizzle-orm";
@@ -17,9 +16,10 @@ import { z } from "zod";
 import { depositPot, withdrawPot } from "./actions";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import AmountInput from "@/components/ui/amount-input";
 
 const formSchema = z.object({
-  amount: z.coerce.number().positive(),
+  amount: z.coerce.number<string | number>().positive(),
 });
 
 export default function PotsTransactionForm({
@@ -112,20 +112,18 @@ export default function PotsTransactionForm({
           name="amount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount to {transactionType}</FormLabel>
+              <FormLabel>
+                Amount to {transactionType === "deposit" ? "Add" : "Withdraw"}
+              </FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  type="number"
-                  value={field.value as string | number}
-                />
+                <AmountInput {...field} placeholder="e.g. 2000" />
               </FormControl>
             </FormItem>
           )}
         />
 
         <Button type="submit" className="w-full" size="lg">
-          Confirm {transactionType}
+          Confirm {transactionType === "deposit" ? "Addition" : "Withdrawal"}
         </Button>
       </form>
     </Form>
