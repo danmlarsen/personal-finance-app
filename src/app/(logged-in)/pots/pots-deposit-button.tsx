@@ -13,7 +13,6 @@ import { potsTable } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import PotsTransactionForm from "./pots-transaction-form";
 import { useState } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function PotsDepositButton({
   pot,
