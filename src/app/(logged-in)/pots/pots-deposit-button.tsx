@@ -13,6 +13,7 @@ import { potsTable } from "@/db/schema";
 import { InferSelectModel } from "drizzle-orm";
 import PotsTransactionForm from "./pots-transaction-form";
 import { useState } from "react";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 export default function PotsDepositButton({
   pot,
@@ -30,11 +31,11 @@ export default function PotsDepositButton({
       </DialogTrigger>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Add to {pot.name}</DialogTitle>
+          <DialogTitle>Add to ‘{pot.name}’</DialogTitle>
           <DialogDescription>
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus
-            hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque,
-            aliquet.
+            Add money to your pot to keep it separate from your main balance. As
+            soon as you add this money, it will be deducted from your current
+            balance.
           </DialogDescription>
         </DialogHeader>
         <PotsTransactionForm

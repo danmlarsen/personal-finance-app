@@ -30,11 +30,10 @@ export default function PotsWithdrawButton({
       </DialogTrigger>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Withdraw from {pot.name}</DialogTitle>
+          <DialogTitle>Withdraw from ‘{pot.name}’</DialogTitle>
           <DialogDescription>
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Phasellus
-            hendrerit. Pellentesque aliquet nibh nec urna. In nisi neque,
-            aliquet.
+            Withdraw from your pot to put money back in your main balance. This
+            will reduce the amount you have in this pot.
           </DialogDescription>
         </DialogHeader>
         <PotsTransactionForm
