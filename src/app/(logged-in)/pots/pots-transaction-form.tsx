@@ -16,8 +16,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { depositPot, withdrawPot } from "./actions";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import AmountInput from "@/components/ui/amount-input";
+import PotsNewAmountDisplay from "./pots-new-amount-display";
 
 const formSchema = z.object({
   amount: z.coerce
@@ -61,59 +61,16 @@ export default function PotsTransactionForm({
     }
   }
 
-  const potTotal = Number(pot.total);
-  const potTarget = Number(pot.target);
-
   const amount = Math.abs(Number(form.watch("amount")));
-  const newAmount =
-    transactionType === "deposit"
-      ? potTotal + amount
-      : Math.max(potTotal - amount, 0);
-
-  const currentPercent = Math.min((potTotal / potTarget) * 100, 100);
-  const amountPercent =
-    transactionType === "deposit"
-      ? Math.min((amount / potTarget) * 100, 100 - currentPercent)
-      : Math.min((amount / potTotal) * 100, potTotal);
-  const newPercent = Math.min((newAmount / potTarget) * 100, 100);
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <p>New Amount</p>
-            <p>${newAmount || potTotal}</p>
-          </div>
-
-          <div className="bg-beige-100 flex h-2 gap-0.5 overflow-hidden rounded-md">
-            <div
-              className={cn(
-                "flex h-2 justify-end overflow-hidden bg-black",
-                transactionType === "withdraw" && "rounded-r-md",
-              )}
-              style={{ width: `${currentPercent}%` }}
-            >
-              {transactionType === "withdraw" && (
-                <div
-                  className="border-l-beige-100 h-2 border-l-2 bg-red-500"
-                  style={{ width: `${amountPercent}%` }}
-                />
-              )}
-            </div>
-            {transactionType === "deposit" && (
-              <div
-                className="h-2 rounded-r-md bg-green-500"
-                style={{ width: `${amountPercent}%` }}
-              />
-            )}
-          </div>
-
-          <div className="flex items-center justify-between">
-            <p>{newPercent.toFixed(2)}%</p>
-            <p>Target of ${potTarget}</p>
-          </div>
-        </div>
+        <PotsNewAmountDisplay
+          pot={pot}
+          amount={amount}
+          transactionType={transactionType}
+        />
 
         <FormField
           control={form.control}
@@ -135,7 +92,7 @@ export default function PotsTransactionForm({
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
 
-        <Button type="submit" className="w-full" size="lg">
+        <Button type="submit" className="mt-2 w-full" size="lg">
           Confirm {transactionType === "deposit" ? "Addition" : "Withdrawal"}
         </Button>
       </form>
