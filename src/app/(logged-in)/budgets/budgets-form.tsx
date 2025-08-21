@@ -8,7 +8,6 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -24,6 +23,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { useBudgetsContext } from "./budgets-context";
+import AmountInput from "@/components/ui/amount-input";
 
 export default function BudgetsForm({
   onSubmit,
@@ -105,11 +105,7 @@ export default function BudgetsForm({
             <FormItem>
               <FormLabel>Maximum Spend</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="e.g. 2000"
-                  value={field.value as string | number}
-                />
+                <AmountInput {...field} placeholder="e.g. 2000" />
               </FormControl>
             </FormItem>
           )}
