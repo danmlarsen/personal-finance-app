@@ -27,6 +27,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { usePotsContext } from "./pots-context";
 import { Fragment } from "react";
+import AmountInput from "@/components/ui/amount-input";
 
 const NAME_MAXLENGTH = 30;
 
@@ -98,7 +99,7 @@ export default function PotsForm({
             <FormItem>
               <FormLabel>Target</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="e.g. 2000" type="number" />
+                <AmountInput {...field} placeholder="e.g. 2000" />
               </FormControl>
               <FormMessage />
             </FormItem>
