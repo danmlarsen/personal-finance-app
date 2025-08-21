@@ -44,14 +44,18 @@ export default function PotsTransactionForm({
   });
 
   async function handleSubmit(data: z.infer<typeof formSchema>) {
-    if (transactionType === "deposit") {
-      await depositPot(pot.id, data.amount);
-      router.refresh();
-      onSuccess();
+    const response =
+      transactionType === "deposit"
+        ? await depositPot(pot.id, data.amount)
+        : await withdrawPot(pot.id, data.amount);
+
+    if (response.error) {
+      form.setError("root", {
+        message: response.message,
+      });
     }
 
-    if (transactionType === "withdraw") {
-      await withdrawPot(pot.id, data.amount);
+    if (response.success) {
       router.refresh();
       onSuccess();
     }
@@ -126,6 +130,10 @@ export default function PotsTransactionForm({
             </FormItem>
           )}
         />
+
+        {!!form.formState.errors.root?.message && (
+          <FormMessage>{form.formState.errors.root.message}</FormMessage>
+        )}
 
         <Button type="submit" className="w-full" size="lg">
           Confirm {transactionType === "deposit" ? "Addition" : "Withdrawal"}

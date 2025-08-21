@@ -156,53 +156,92 @@ export async function deletePot(id: number) {
 }
 
 export async function depositPot(id: number, amount: number) {
-  await db.transaction(async (tx) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return {
-        error: true,
-        message: "Unauthorized",
-      };
-    }
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
+  const userId = Number(session.user?.id);
 
-    await tx
-      .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} - ${amount}` })
-      .where(eq(balanceTable.userId, Number(session.user.id)));
-    await tx
-      .update(potsTable)
-      .set({ total: sql`${potsTable.total} + ${amount}` })
-      .where(
-        and(
-          eq(potsTable.id, id),
-          eq(potsTable.userId, Number(session.user.id)),
-        ),
-      );
-  });
+  const [row] = await db
+    .select({ current: balanceTable.current })
+    .from(balanceTable)
+    .where(eq(balanceTable.userId, userId));
+  const currentBalance = Number(row.current);
+  if (currentBalance < amount) {
+    return {
+      error: true,
+      message: "Insufficient balance to deposit this amount",
+    };
+  }
+
+  try {
+    await db.transaction(async (tx) => {
+      await tx
+        .update(balanceTable)
+        .set({ current: sql`${balanceTable.current} - ${amount}` })
+        .where(eq(balanceTable.userId, userId));
+      await tx
+        .update(potsTable)
+        .set({ total: sql`${potsTable.total} + ${amount}` })
+        .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
+    });
+
+    return {
+      success: true,
+    };
+  } catch (e: any) {
+    return {
+      error: true,
+      message: "An error occurred",
+    };
+  }
 }
 
 export async function withdrawPot(id: number, amount: number) {
-  await db.transaction(async (tx) => {
-    const session = await auth();
-    if (!session?.user?.id) {
-      return {
-        error: true,
-        message: "Unauthorized",
-      };
-    }
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
+  const userId = Number(session.user?.id);
 
-    await tx
-      .update(balanceTable)
-      .set({ current: sql`${balanceTable.current} + ${amount}` })
-      .where(eq(balanceTable.userId, Number(session.user.id)));
-    await tx
-      .update(potsTable)
-      .set({ total: sql`${potsTable.total} - ${amount}` })
-      .where(
-        and(
-          eq(potsTable.id, id),
-          eq(potsTable.userId, Number(session.user.id)),
-        ),
-      );
-  });
+  const [row] = await db
+    .select({ total: potsTable.total })
+    .from(potsTable)
+    .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
+  const total = Number(row.total);
+  if (total < amount) {
+    return {
+      error: true,
+      message:
+        "Insufficient funds in this pot to withdraw the requested amount",
+    };
+  }
+
+  try {
+    await db.transaction(async (tx) => {
+      await tx
+        .update(balanceTable)
+        .set({ current: sql`${balanceTable.current} + ${amount}` })
+        .where(eq(balanceTable.userId, userId));
+      await tx
+        .update(potsTable)
+        .set({ total: sql`${potsTable.total} - ${amount}` })
+        .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
+    });
+
+    return {
+      success: true,
+    };
+  } catch (e: any) {
+    return {
+      error: true,
+      message: "An error occurred",
+    };
+  }
 }
