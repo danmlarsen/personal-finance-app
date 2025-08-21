@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { potsTable } from "@/db/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +20,10 @@ import { cn } from "@/lib/utils";
 import AmountInput from "@/components/ui/amount-input";
 
 const formSchema = z.object({
-  amount: z.coerce.number<string | number>().positive(),
+  amount: z.coerce
+    .number<string | number>()
+    .positive("Please enter a positive number")
+    .max(10000, "Maximum transaction amount is $10,000"),
 });
 
 export default function PotsTransactionForm({
@@ -118,6 +122,7 @@ export default function PotsTransactionForm({
               <FormControl>
                 <AmountInput {...field} placeholder="e.g. 2000" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

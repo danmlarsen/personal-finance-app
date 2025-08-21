@@ -7,6 +7,7 @@ export const potsFormSchema = z.object({
     .max(30, "Maximum 30 characters"),
   target: z.coerce
     .number<string | number>()
-    .positive("Please enter a positive number"),
+    .positive("Please enter a positive number")
+    .max(10000, "Max target amount is $10,000"),
   theme: z.string(),
 });

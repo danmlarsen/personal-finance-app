@@ -7,6 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import {
   Select,
@@ -107,6 +108,7 @@ export default function BudgetsForm({
               <FormControl>
                 <AmountInput {...field} placeholder="e.g. 2000" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
