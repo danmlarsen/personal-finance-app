@@ -4,7 +4,7 @@ import BudgetsPieChart from "./budgets-pie-chart";
 export default function BudgetsSummary({ budgets }: { budgets: TBudget[] }) {
   return (
     <div className="grid gap-8 md:grid-cols-[minmax(280px,1fr)_1fr] lg:grid-cols-1">
-      <div>
+      <div className="grid min-h-[302px] items-center">
         <BudgetsPieChart budgets={budgets} />
       </div>
       <div className="space-y-6">

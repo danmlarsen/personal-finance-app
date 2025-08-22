@@ -42,49 +42,55 @@ export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
   ) satisfies ChartConfig;
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="mx-auto aspect-square max-h-[280px]"
-    >
-      <PieChart>
-        <Pie
-          data={chartData}
-          dataKey="spent"
-          nameKey="name"
-          innerRadius={70}
-          strokeWidth={5}
-        >
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                return (
-                  <text
-                    x={viewBox.cx}
-                    y={viewBox.cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className="fill-foreground text-3xl font-bold"
-                    >
-                      {numeral(Math.abs(totalSpent)).format("$0,0")}
-                    </tspan>
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) + 24}
-                      className="fill-muted-foreground"
-                    >
-                      of {numeral(Math.abs(totalBudget)).format("$0,0")} limit
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
-          />
-        </Pie>
-      </PieChart>
-    </ChartContainer>
+    <div className="relative">
+      <div className="pointer-events-none absolute top-1/2 left-1/2 z-10 size-45 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/25" />
+      <ChartContainer
+        config={chartConfig}
+        className="absolute top-1/2 left-1/2 mx-auto aspect-square w-[300px] -translate-x-1/2 -translate-y-1/2"
+      >
+        <PieChart>
+          <Pie
+            data={chartData}
+            dataKey="spent"
+            nameKey="name"
+            innerRadius={70}
+            strokeWidth={5}
+          >
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  return (
+                    <>
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {numeral(Math.abs(totalSpent)).format("$0,0")}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground"
+                        >
+                          of {numeral(Math.abs(totalBudget)).format("$0,0")}{" "}
+                          limit
+                        </tspan>
+                      </text>
+                    </>
+                  );
+                }
+              }}
+            />
+          </Pie>
+        </PieChart>
+      </ChartContainer>
+    </div>
   );
 }
