@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { transactionsTable } from "@/db/schema";
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
 import "server-only";
 
 export type TRecurringBill = {
@@ -12,8 +12,9 @@ export type TRecurringBill = {
 };
 
 export async function getRecurringBills({
+  billTitle,
   sortBy = "latest",
-}: { sortBy?: string } = {}) {
+}: { billTitle?: string; sortBy?: string } = {}) {
   const latestPerName = db
     .selectDistinctOn([transactionsTable.name], {
       id: transactionsTable.id,
@@ -38,27 +39,37 @@ export async function getRecurringBills({
     })
     .from(latest);
 
+  let filters = [];
+
+  if (billTitle) {
+    filters.push(ilike(latest.name, `%${billTitle}%`));
+  }
+
+  const whereClause = filters.length > 0 ? and(...filters) : undefined;
+
+  const filteredQuery = whereClause ? baseQuery.where(whereClause) : baseQuery;
+
   let sortedQuery;
   switch (sortBy) {
     case "oldest":
-      sortedQuery = baseQuery.orderBy(
+      sortedQuery = filteredQuery.orderBy(
         desc(sql`EXTRACT(DAY FROM ${latest.created_at})`),
       );
       break;
     case "a-z":
-      sortedQuery = baseQuery.orderBy(asc(latest.name));
+      sortedQuery = filteredQuery.orderBy(asc(latest.name));
       break;
     case "z-a":
-      sortedQuery = baseQuery.orderBy(desc(latest.name));
+      sortedQuery = filteredQuery.orderBy(desc(latest.name));
       break;
     case "highest":
-      sortedQuery = baseQuery.orderBy(asc(latest.amount));
+      sortedQuery = filteredQuery.orderBy(asc(latest.amount));
       break;
     case "lowest":
-      sortedQuery = baseQuery.orderBy(desc(latest.amount));
+      sortedQuery = filteredQuery.orderBy(desc(latest.amount));
       break;
     default:
-      sortedQuery = baseQuery.orderBy(
+      sortedQuery = filteredQuery.orderBy(
         asc(sql`EXTRACT(DAY FROM ${latest.created_at})`),
       );
   }
