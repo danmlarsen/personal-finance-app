@@ -23,6 +23,7 @@ import Image from "next/image";
 import IconSortMobile from "@/assets/images/icon-sort-mobile.svg";
 import IconFilterMobile from "@/assets/images/icon-filter-mobile.svg";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import IconSearch from "@/assets/images/icon-search.svg";
 
 const formSchema = z.object({
   transactionName: z.string().optional(),
@@ -38,7 +39,7 @@ export default function TransactionsOptions({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const isMobile = useMediaQuery("(max-width: 600px)");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,107 +70,111 @@ export default function TransactionsOptions({
   }
 
   return (
-    <>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex items-center justify-between"
-        >
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="flex items-center justify-between"
+      >
+        <FormField
+          control={form.control}
+          name="transactionName"
+          render={({ field }) => (
+            <FormItem className="w-full max-w-[215px] md:max-w-[161px] lg:max-w-xs">
+              <FormControl>
+                <div className="relative">
+                  <Input {...field} placeholder="Search transaction" />
+                  <Image
+                    src={IconSearch}
+                    alt="Search icon"
+                    className="absolute top-1/2 right-5 -translate-y-1/2"
+                  />
+                </div>
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <div className="flex gap-2 md:gap-8">
           <FormField
             control={form.control}
-            name="transactionName"
+            name="sortby"
             render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input {...field} placeholder="Search transaction" />
-                </FormControl>
+              <FormItem className="flex gap-2">
+                <FormLabel className="hidden shrink-0 md:flex">
+                  Sort by
+                </FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.handleSubmit(handleSubmit)();
+                  }}
+                >
+                  <SelectTrigger isIcon={isMobile} className="px-2 md:px-5">
+                    {!isMobile && <SelectValue />}
+                    {isMobile && (
+                      <Image
+                        src={IconSortMobile}
+                        alt="Sort icon"
+                        width={20}
+                        height={20}
+                        className="size-5"
+                      />
+                    )}
+                  </SelectTrigger>
+
+                  <SelectContent>
+                    <SelectItem value="latest">Latest</SelectItem>
+                    <SelectItem value="oldest">Oldest</SelectItem>
+                    <SelectItem value="a-z">A to Z</SelectItem>
+                    <SelectItem value="z-a">Z to A</SelectItem>
+                    <SelectItem value="highest">Highest</SelectItem>
+                    <SelectItem value="lowest">Lowest</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormItem>
             )}
           />
 
-          <div className="flex md:gap-8">
-            <FormField
-              control={form.control}
-              name="sortby"
-              render={({ field }) => (
-                <FormItem className="flex gap-2">
-                  <FormLabel className="hidden md:flex">Sort by</FormLabel>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      form.handleSubmit(handleSubmit)();
-                    }}
-                  >
-                    <SelectTrigger isIcon={isMobile}>
-                      {!isMobile && <SelectValue />}
-                      {isMobile && (
-                        <Image
-                          src={IconSortMobile}
-                          alt="Sort icon"
-                          width={20}
-                          height={20}
-                          className="size-5"
-                        />
-                      )}
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      <SelectItem value="latest">Latest</SelectItem>
-                      <SelectItem value="oldest">Oldest</SelectItem>
-                      <SelectItem value="a-z">A to Z</SelectItem>
-                      <SelectItem value="z-a">Z to A</SelectItem>
-                      <SelectItem value="highest">Highest</SelectItem>
-                      <SelectItem value="lowest">Lowest</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem className="flex gap-2">
-                  <FormLabel className="hidden md:flex">Category</FormLabel>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      form.handleSubmit(handleSubmit)();
-                    }}
-                  >
-                    <SelectTrigger isIcon={isMobile}>
-                      {!isMobile && <SelectValue />}
-                      {isMobile && (
-                        <Image
-                          src={IconFilterMobile}
-                          alt="Filter icon"
-                          width={20}
-                          height={20}
-                          className="size-5"
-                        />
-                      )}
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Transactions</SelectItem>
-                      {categories.map((category) => (
-                        <SelectItem
-                          key={category}
-                          value={category.toLowerCase()}
-                        >
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-          </div>
-        </form>
-      </Form>
-    </>
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem className="flex gap-2">
+                <FormLabel className="hidden md:flex">Category</FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    form.handleSubmit(handleSubmit)();
+                  }}
+                >
+                  <SelectTrigger isIcon={isMobile} className="px-2 md:px-5">
+                    {!isMobile && <SelectValue />}
+                    {isMobile && (
+                      <Image
+                        src={IconFilterMobile}
+                        alt="Filter icon"
+                        width={20}
+                        height={20}
+                        className="size-5"
+                      />
+                    )}
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Transactions</SelectItem>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category.toLowerCase()}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        </div>
+      </form>
+    </Form>
   );
 }
