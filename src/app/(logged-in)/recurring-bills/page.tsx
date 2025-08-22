@@ -1,7 +1,8 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import RecurringBillsList from "./recurring-bills-list";
 import RecurringBillsSummary from "./recurring-bills-summary";
 import { getRecurringBills } from "@/data/getRecurringBills";
+import RecurringBillsOptions from "./recurring-bills-options";
 
 export default async function RecurringBillsPage() {
   const recurringBills = await getRecurringBills();
@@ -12,6 +13,9 @@ export default async function RecurringBillsPage() {
       <div className="grid gap-6 lg:grid-cols-[337px_1fr]">
         <RecurringBillsSummary recurringBills={recurringBills} />
         <Card>
+          <CardHeader>
+            <RecurringBillsOptions />
+          </CardHeader>
           <CardContent>
             <RecurringBillsList recurringBills={recurringBills} />
           </CardContent>
