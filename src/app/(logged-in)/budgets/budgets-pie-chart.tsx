@@ -7,6 +7,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { type TBudget } from "@/data/getBudgets";
+import numeral from "numeral";
 import { Label, Pie, PieChart } from "recharts";
 
 export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
@@ -46,10 +47,6 @@ export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
       className="mx-auto aspect-square max-h-[280px]"
     >
       <PieChart>
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        />
         <Pie
           data={chartData}
           dataKey="spent"
@@ -72,14 +69,14 @@ export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
                       y={viewBox.cy}
                       className="fill-foreground text-3xl font-bold"
                     >
-                      ${Math.abs(totalSpent).toLocaleString()}
+                      {numeral(Math.abs(totalSpent)).format("$0,0")}
                     </tspan>
                     <tspan
                       x={viewBox.cx}
                       y={(viewBox.cy || 0) + 24}
                       className="fill-muted-foreground"
                     >
-                      of ${totalBudget} limit
+                      of {numeral(Math.abs(totalBudget)).format("$0,0")} limit
                     </tspan>
                   </text>
                 );

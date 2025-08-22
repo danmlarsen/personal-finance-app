@@ -26,7 +26,7 @@ export default async function BudgetsOverview() {
         </Button>
       </CardHeader>
       <CardContent className="grid items-center md:grid-cols-[1fr_101px]">
-        <div className="min-h-[302px]">
+        <div className="grid min-h-[302px] items-center">
           <BudgetsPieChart budgets={budgets} />
         </div>
         <ul className="grid grid-cols-2 gap-4 md:grid-cols-1">
