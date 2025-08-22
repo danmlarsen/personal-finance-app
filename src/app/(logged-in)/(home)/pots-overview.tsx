@@ -38,22 +38,29 @@ export default async function PotsOverview() {
             </p>
           </div>
         </div>
-        <ul className="grid grid-cols-2 gap-4">
-          {pots.slice(0, 4).map((pot) => (
-            <li key={pot.id} className="flex items-center gap-4">
-              <div
-                className="h-full w-1 rounded-full"
-                style={{ backgroundColor: pot.theme }}
-              />
-              <div>
-                <p className="text-muted-foreground text-xs">{pot.name}</p>
-                <p className="text-sm font-bold">
-                  {numeral(pot.total).format("$0,0")}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {pots.length === 0 && (
+          <p className="flex items-center justify-center">
+            You have no pots yet.
+          </p>
+        )}
+        {pots.length > 0 && (
+          <ul className="grid grid-cols-2 gap-4">
+            {pots.slice(0, 4).map((pot) => (
+              <li key={pot.id} className="flex items-center gap-4">
+                <div
+                  className="h-full w-1 rounded-full"
+                  style={{ backgroundColor: pot.theme }}
+                />
+                <div>
+                  <p className="text-muted-foreground text-xs">{pot.name}</p>
+                  <p className="text-sm font-bold">
+                    {numeral(pot.total).format("$0,0")}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </CardContent>
     </Card>
   );

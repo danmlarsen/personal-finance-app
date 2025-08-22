@@ -26,26 +26,31 @@ export default async function BudgetsOverview() {
         </Button>
       </CardHeader>
       <CardContent className="grid items-center md:grid-cols-[1fr_101px]">
-        <div className="grid min-h-[302px] items-center">
-          <BudgetsPieChart budgets={budgets} />
-        </div>
-        <ul className="grid grid-cols-2 gap-4 md:grid-cols-1">
-          {budgets.slice(0, 4).map((budget) => (
-            <li
-              key={budget.id}
-              className="grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4 text-xs"
-            >
-              <div
-                className="row-span-2 w-1 rounded-md"
-                style={{ backgroundColor: budget.theme }}
-              />
-              <p className="text-muted-foreground">{budget.name}</p>
-              <p className="font-bold">
-                {numeral(budget.maximum).format("$0,0.00")}
-              </p>
-            </li>
-          ))}
-        </ul>
+        {budgets.length === 0 && <p>You have no budgets yet.</p>}
+        {budgets.length > 0 && (
+          <>
+            <div className="grid min-h-[302px] items-center">
+              <BudgetsPieChart budgets={budgets} />
+            </div>
+            <ul className="grid grid-cols-2 gap-4 md:grid-cols-1">
+              {budgets.slice(0, 4).map((budget) => (
+                <li
+                  key={budget.id}
+                  className="grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4 text-xs"
+                >
+                  <div
+                    className="row-span-2 w-1 rounded-md"
+                    style={{ backgroundColor: budget.theme }}
+                  />
+                  <p className="text-muted-foreground">{budget.name}</p>
+                  <p className="font-bold">
+                    {numeral(budget.maximum).format("$0,0.00")}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </CardContent>
     </Card>
   );

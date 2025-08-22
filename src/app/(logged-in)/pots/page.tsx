@@ -4,6 +4,7 @@ import { getPots } from "@/data/getPots";
 import { unauthorized } from "next/navigation";
 import { auth } from "@/auth";
 import { PotsContextProvider } from "./pots-context";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function PotsPage() {
   const session = await auth();
@@ -21,7 +22,17 @@ export default async function PotsPage() {
           <h1 className="text-3xl font-bold">Pots</h1>
           <AddNewPotButton />
         </div>
-        <PotsList pots={pots} />
+        {pots.length === 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>No pots found</CardTitle>
+            </CardHeader>
+            <CardContent>
+              You have no pots yet. Click "Add New Pot" to get started.
+            </CardContent>
+          </Card>
+        )}
+        {pots.length > 0 && <PotsList pots={pots} />}
       </div>
     </PotsContextProvider>
   );
