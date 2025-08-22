@@ -4,8 +4,16 @@ import RecurringBillsSummary from "./recurring-bills-summary";
 import { getRecurringBills } from "@/data/getRecurringBills";
 import RecurringBillsOptions from "./recurring-bills-options";
 
-export default async function RecurringBillsPage() {
-  const recurringBills = await getRecurringBills();
+export default async function RecurringBillsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ title?: string; sortby?: string }>;
+}) {
+  const searchParamValues = await searchParams;
+  const billTitle = searchParamValues.title;
+  const sortBy = searchParamValues.sortby || "latest";
+
+  const recurringBills = await getRecurringBills({ billTitle, sortBy });
 
   return (
     <div className="space-y-8">

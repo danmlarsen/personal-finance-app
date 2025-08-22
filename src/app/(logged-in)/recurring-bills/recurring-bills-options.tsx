@@ -66,7 +66,7 @@ export default function RecurringBillsOptions() {
           control={form.control}
           name="billTitle"
           render={({ field }) => (
-            <FormItem className="w-full max-w-[215px] md:max-w-[161px] lg:max-w-xs">
+            <FormItem className="w-full max-w-xs">
               <FormControl>
                 <div className="relative">
                   <Input {...field} placeholder="Search transaction" />
