@@ -167,19 +167,19 @@ export async function depositPot(id: number, amount: number) {
   }
   const userId = Number(session.user?.id);
 
-  const [row] = await db
-    .select({ current: balanceTable.current })
-    .from(balanceTable)
-    .where(eq(balanceTable.userId, userId));
-  const currentBalance = Number(row.current);
-  if (currentBalance < amount) {
-    return {
-      error: true,
-      message: "Insufficient balance to deposit this amount",
-    };
-  }
-
   try {
+    const [row] = await db
+      .select({ current: balanceTable.current })
+      .from(balanceTable)
+      .where(eq(balanceTable.userId, userId));
+    const currentBalance = Number(row.current);
+    if (currentBalance < amount) {
+      return {
+        error: true,
+        message: "Insufficient balance to deposit this amount",
+      };
+    }
+
     await db.transaction(async (tx) => {
       await tx
         .update(balanceTable)
@@ -212,20 +212,20 @@ export async function withdrawPot(id: number, amount: number) {
   }
   const userId = Number(session.user?.id);
 
-  const [row] = await db
-    .select({ total: potsTable.total })
-    .from(potsTable)
-    .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
-  const total = Number(row.total);
-  if (total < amount) {
-    return {
-      error: true,
-      message:
-        "Insufficient funds in this pot to withdraw the requested amount",
-    };
-  }
-
   try {
+    const [row] = await db
+      .select({ total: potsTable.total })
+      .from(potsTable)
+      .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
+    const total = Number(row.total);
+    if (total < amount) {
+      return {
+        error: true,
+        message:
+          "Insufficient funds in this pot to withdraw the requested amount",
+      };
+    }
+
     await db.transaction(async (tx) => {
       await tx
         .update(balanceTable)

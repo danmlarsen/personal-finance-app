@@ -15,6 +15,7 @@ import z from "zod";
 import { potsFormSchema } from "@/validation/potsFormSchema";
 import { createPot } from "./actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function AddNewPotButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,13 +26,15 @@ export default function AddNewPotButton() {
     setSubmitErrorText("");
     const response = await createPot(data);
 
-    if (response.success) {
-      router.refresh();
-      setIsOpen(false);
-    }
-
     if (response.error) {
       setSubmitErrorText(response.message);
+      return;
+    }
+
+    if (response.success) {
+      toast.success(`Pot "${data.name}" created successfully.`);
+      router.refresh();
+      setIsOpen(false);
     }
   }
 

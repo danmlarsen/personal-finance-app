@@ -50,27 +50,29 @@ export default function PotsDropdownMenu({
     setEditSubmitErrorText("");
     const response = await editPot(pot.id, data);
 
+    if (response.error) {
+      setEditSubmitErrorText(response.message);
+      return;
+    }
+
     if (response.success) {
       setEditDialogOpen(false);
       router.refresh();
-    }
-
-    if (response.error) {
-      setEditSubmitErrorText(response.message);
     }
   }
 
   async function onDeletePot() {
     const response = await deletePot(pot.id);
 
+    if (response.error) {
+      toast.error(`An error occurred deleting pot ${pot.name}`);
+      return;
+    }
+
     if (response.success) {
       toast.success(
         `Successfully deleted ${pot.name} and transfered ${numeral(pot.total).format("$0,0.00")} back to balance`,
       );
-    }
-
-    if (response.error) {
-      toast.error(`An error occurred deleting pot ${pot.name}`);
     }
 
     router.refresh();
