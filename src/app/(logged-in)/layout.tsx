@@ -16,7 +16,7 @@ export default async function LoggedInLayout({
 
   return (
     <>
-      <div className="grid min-h-screen lg:grid-cols-[auto_1fr]">
+      <div className="grid min-h-dvh lg:grid-cols-[auto_1fr]">
         <DesktopNav />
         <main className="px-4 py-6 md:px-10 md:py-8">{children}</main>
       </div>
