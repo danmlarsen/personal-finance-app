@@ -24,16 +24,23 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
     };
   }
 
-  await db.insert(budgetsTable).values({
-    categoryId: data.category,
-    userId: Number(session.user.id),
-    maximum: data.maximum.toString(),
-    theme: data.theme,
-  });
+  try {
+    await db.insert(budgetsTable).values({
+      categoryId: data.category,
+      userId: Number(session.user.id),
+      maximum: data.maximum.toString(),
+      theme: data.theme,
+    });
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: "An error occurred while creating the budget.",
+    };
+  }
 }
 
 export async function editBudget(
@@ -56,23 +63,30 @@ export async function editBudget(
     };
   }
 
-  await db
-    .update(budgetsTable)
-    .set({
-      categoryId: data.category,
-      maximum: data.maximum.toString(),
-      theme: data.theme,
-    })
-    .where(
-      and(
-        eq(budgetsTable.id, id),
-        eq(budgetsTable.userId, Number(session.user.id)),
-      ),
-    );
+  try {
+    await db
+      .update(budgetsTable)
+      .set({
+        categoryId: data.category,
+        maximum: data.maximum.toString(),
+        theme: data.theme,
+      })
+      .where(
+        and(
+          eq(budgetsTable.id, id),
+          eq(budgetsTable.userId, Number(session.user.id)),
+        ),
+      );
 
-  return {
-    success: true,
-  };
+    return {
+      success: true,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: "An error occurred while updating the budget.",
+    };
+  }
 }
 
 export async function deleteBudget(id: number) {
@@ -84,12 +98,23 @@ export async function deleteBudget(id: number) {
     };
   }
 
-  await db
-    .delete(budgetsTable)
-    .where(
-      and(
-        eq(budgetsTable.id, id),
-        eq(budgetsTable.userId, Number(session.user.id)),
-      ),
-    );
+  try {
+    await db
+      .delete(budgetsTable)
+      .where(
+        and(
+          eq(budgetsTable.id, id),
+          eq(budgetsTable.userId, Number(session.user.id)),
+        ),
+      );
+
+    return {
+      success: true,
+    };
+  } catch (e) {
+    return {
+      error: true,
+      message: "An error occurred while deleting the budget.",
+    };
+  }
 }
