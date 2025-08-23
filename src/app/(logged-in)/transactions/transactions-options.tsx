@@ -73,7 +73,7 @@ export default function TransactionsOptions({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="flex items-center justify-between"
+        className="flex items-center justify-between gap-2"
       >
         <FormField
           control={form.control}
