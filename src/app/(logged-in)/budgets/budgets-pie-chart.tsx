@@ -1,22 +1,17 @@
 "use client";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { type TBudget } from "@/data/getBudgets";
 import numeral from "numeral";
 import { Label, Pie, PieChart } from "recharts";
 
 export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
   const totalSpent = budgets.reduce(
-    (acc, budget) => acc + Number(budget.totalSpent),
+    (acc, budget) => acc + Math.abs(Number(budget.totalSpent)),
     0,
   );
   const totalBudget = budgets.reduce(
-    (acc, budget) => acc + Number(budget.maximum),
+    (acc, budget) => acc + Math.abs(Number(budget.maximum)),
     0,
   );
 
@@ -72,15 +67,14 @@ export default function BudgetsPieChart({ budgets }: { budgets: TBudget[] }) {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {numeral(Math.abs(totalSpent)).format("$0,0")}
+                          {numeral(totalSpent).format("$0,0")}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          of {numeral(Math.abs(totalBudget)).format("$0,0")}{" "}
-                          limit
+                          of {numeral(totalBudget).format("$0,0")} limit
                         </tspan>
                       </text>
                     </>
