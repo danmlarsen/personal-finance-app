@@ -27,28 +27,27 @@ export default async function BudgetsPage() {
           <h1 className="text-3xl font-bold">Budgets</h1>
           <AddNewBudgetButton categories={categories} />
         </div>
-        <div className="grid items-start gap-6 @4xl:grid-cols-[428px_1fr]">
-          {budgets.length === 0 && (
+
+        {budgets.length === 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle>No budgets found</CardTitle>
+            </CardHeader>
+            <CardContent>
+              You have no budgets yet. Click "Add New Budget" to get started.
+            </CardContent>
+          </Card>
+        )}
+        {budgets.length > 0 && (
+          <div className="grid items-start gap-6 @4xl:grid-cols-[428px_1fr]">
             <Card>
-              <CardHeader>
-                <CardTitle>No budgets found</CardTitle>
-              </CardHeader>
               <CardContent>
-                You have no budgets yet. Click "Add New Budget" to get started.
+                <BudgetsSummary budgets={budgets} />
               </CardContent>
             </Card>
-          )}
-          {budgets.length > 0 && (
-            <>
-              <Card>
-                <CardContent>
-                  <BudgetsSummary budgets={budgets} />
-                </CardContent>
-              </Card>
-              <BudgetsList budgets={budgets} categories={categories} />
-            </>
-          )}
-        </div>
+            <BudgetsList budgets={budgets} categories={categories} />
+          </div>
+        )}
       </div>
     </BudgetsContextProvider>
   );
