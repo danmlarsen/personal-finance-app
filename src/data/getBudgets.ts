@@ -59,7 +59,7 @@ export function getCachedBudgets(userId: number) {
     async () => {
       return getBudgets(userId);
     },
-    [userId.toString()],
+    ["budgets", userId.toString()],
     { tags: [`budgets-${userId}`], revalidate: 3600 },
   )();
 }

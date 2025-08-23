@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getBudgets } from "@/data/getBudgets";
+import { getCachedBudgets } from "@/data/getBudgets";
 import Link from "next/link";
 import BudgetsPieChart from "../budgets/budgets-pie-chart";
 import numeral from "numeral";
@@ -12,7 +12,7 @@ export default async function BudgetsOverview() {
   if (!session?.user?.id) return null;
 
   const userId = Number(session.user.id);
-  const budgets = await getBudgets(userId);
+  const budgets = await getCachedBudgets(userId);
 
   return (
     <Card>

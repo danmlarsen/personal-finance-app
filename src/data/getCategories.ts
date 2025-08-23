@@ -13,7 +13,7 @@ export function getCachedCategories() {
     async () => {
       return getCategories();
     },
-    [],
+    ["categories"],
     { tags: ["categories"], revalidate: 3600 },
   )();
 }
