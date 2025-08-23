@@ -101,7 +101,7 @@ export default function SignupForm() {
         {!!form.formState.errors.root?.message && (
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" size="lg">
           Create Account
         </Button>
       </form>

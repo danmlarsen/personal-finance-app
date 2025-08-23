@@ -77,7 +77,7 @@ export default function LoginForm() {
         {!!form.formState.errors.root?.message && (
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full" size="lg">
           Login
         </Button>
       </form>

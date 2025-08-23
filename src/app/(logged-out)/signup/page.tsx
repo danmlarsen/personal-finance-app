@@ -17,8 +17,11 @@ export default function SignupPage() {
       <CardContent>
         <SignupForm />
       </CardContent>
-      <CardFooter>
-        Already have an account? <Link href="/login">Login</Link>
+      <CardFooter className="justify-center gap-2">
+        <span>Already have an account?</span>
+        <Link href="/login" className="text-grey-900 font-bold underline">
+          Login
+        </Link>
       </CardFooter>
     </Card>
   );

@@ -16,8 +16,8 @@ export default async function LoggedOutLayout({
   }
 
   return (
-    <div className="grid min-h-screen lg:place-items-center">
-      <div className="mx-auto grid h-[960px] w-full max-w-[1440px] grid-rows-[70px_1fr] lg:grid-cols-[560px_1fr] lg:grid-rows-1 lg:gap-5 lg:p-5">
+    <div className="grid min-h-dvh lg:place-items-center">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-rows-[70px_1fr] lg:h-[960px] lg:grid-cols-[560px_1fr] lg:grid-rows-1 lg:gap-5 lg:p-5">
         <header className="relative flex items-center justify-center overflow-hidden rounded-b-lg bg-black lg:flex-col lg:items-start lg:justify-between lg:rounded-lg lg:p-10">
           <Image
             src={IllustrationAuthentication}
