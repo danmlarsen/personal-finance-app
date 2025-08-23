@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { budgetsTable, categoriesTable, transactionsTable } from "@/db/schema";
 import { sql } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import "server-only";
 
 export type TRecentTransaction = {
@@ -51,4 +52,14 @@ export async function getBudgets(userId: number) {
 `);
 
   return budgets.rows;
+}
+
+export function getCachedBudgets(userId: number) {
+  return unstable_cache(
+    async () => {
+      return getBudgets(userId);
+    },
+    [userId.toString()],
+    { tags: [`budgets-${userId}`], revalidate: 3600 },
+  )();
 }

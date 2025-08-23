@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import BudgetsSummary from "./budgets-summary";
 import BudgetsList from "./budgets-list";
 import AddNewBudgetButton from "./add-new-budget-button";
-import { getCategories } from "@/data/getCategories";
-import { getBudgets } from "@/data/getBudgets";
+import { getCachedCategories } from "@/data/getCategories";
+import { getCachedBudgets } from "@/data/getBudgets";
 import { auth } from "@/auth";
 import { unauthorized } from "next/navigation";
 import { BudgetsContextProvider } from "./budgets-context";
@@ -16,8 +16,8 @@ export default async function BudgetsPage() {
   const userId = Number(session.user.id);
 
   const [budgets, categories] = await Promise.all([
-    getBudgets(userId),
-    getCategories(),
+    getCachedBudgets(userId),
+    getCachedCategories(),
   ]);
 
   return (

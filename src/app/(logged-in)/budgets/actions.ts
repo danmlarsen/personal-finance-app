@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { budgetsTable } from "@/db/schema";
 import { budgetFormSchema } from "@/validation/budgetFormSchema";
 import { and, eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import z from "zod";
 
 export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
@@ -31,6 +32,8 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
       maximum: data.maximum.toString(),
       theme: data.theme,
     });
+
+    revalidateTag(`budgets-${session.user.id}`);
 
     return {
       success: true,
@@ -78,6 +81,8 @@ export async function editBudget(
         ),
       );
 
+    revalidateTag(`budgets-${session.user.id}`);
+
     return {
       success: true,
     };
@@ -107,6 +112,8 @@ export async function deleteBudget(id: number) {
           eq(budgetsTable.userId, Number(session.user.id)),
         ),
       );
+
+    revalidateTag(`budgets-${session.user.id}`);
 
     return {
       success: true,
