@@ -31,8 +31,8 @@ export default function AddNewBudgetButton({
     const response = await createBudget(data);
 
     if (response.success) {
-      router.refresh();
       setIsOpen(false);
+      router.refresh();
 
       const createdBudgetName = categories.find(
         (category) => category.id === data.category,
