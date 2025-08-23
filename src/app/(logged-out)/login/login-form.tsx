@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { loginWithCredentials } from "./actions";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function LoginForm() {
     }
 
     if (response.success) {
-      redirect("/");
+      router.push("/");
     }
   }
 

@@ -35,7 +35,7 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
     return {
       success: true,
     };
-  } catch (e) {
+  } catch {
     return {
       error: true,
       message: "An error occurred while creating the budget.",
@@ -81,7 +81,7 @@ export async function editBudget(
     return {
       success: true,
     };
-  } catch (e) {
+  } catch {
     return {
       error: true,
       message: "An error occurred while updating the budget.",
@@ -111,7 +111,7 @@ export async function deleteBudget(id: number) {
     return {
       success: true,
     };
-  } catch (e) {
+  } catch {
     return {
       error: true,
       message: "An error occurred while deleting the budget.",

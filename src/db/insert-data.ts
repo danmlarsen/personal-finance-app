@@ -19,7 +19,7 @@ function getUniqueTransactionCategories() {
   return Array.from(new Set(data.transactions.map((t) => t.category)));
 }
 
-async function insertCategories() {
+export async function insertCategories() {
   const categoriesData = getUniqueTransactionCategories().map((t) => ({
     name: t,
   }));
@@ -42,7 +42,9 @@ export async function insertBalance(userId: number) {
   ]);
 }
 
-async function insertTransactions(categories: { id: number; name: string }[]) {
+export async function insertTransactions(
+  categories: { id: number; name: string }[],
+) {
   const transactionsData = data.transactions.map((transaction) => {
     const categoryId = categories.find(
       (c) => c.name === transaction.category,

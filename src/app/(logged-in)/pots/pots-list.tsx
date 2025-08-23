@@ -1,5 +1,4 @@
 import AmountBar from "@/components/ui/amount-bar";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getPots } from "@/data/getPots";
 import PotsDropdownMenu from "./pots-dropdown-menu";
 import PotsDepositButton from "./pots-deposit-button";
 import PotsWithdrawButton from "./pots-withdraw-button";

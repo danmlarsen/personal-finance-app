@@ -28,7 +28,8 @@ export default async function PotsPage() {
               <CardTitle>No pots found</CardTitle>
             </CardHeader>
             <CardContent>
-              You have no pots yet. Click "Add New Pot" to get started.
+              You have no pots yet. Click &quot;Add New Pot&quot; to get
+              started.
             </CardContent>
           </Card>
         )}

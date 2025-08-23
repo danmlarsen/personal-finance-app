@@ -35,8 +35,9 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
     return {
       success: true,
     };
-  } catch (e: any) {
-    if (e?.cause?.code === "23505") {
+  } catch (e: unknown) {
+    const err = e as { cause?: { code?: string } };
+    if (err.cause?.code === "23505") {
       return {
         error: true,
         message: "A pot with that name already exists",
@@ -87,8 +88,9 @@ export async function editPot(
     return {
       success: true,
     };
-  } catch (e: any) {
-    if (e?.cause?.code === "23505") {
+  } catch (e: unknown) {
+    const err = e as { cause?: { code?: string } };
+    if (err.cause?.code === "23505") {
       return {
         error: true,
         message: "A pot with that name already exists",
@@ -147,7 +149,7 @@ export async function deletePot(id: number) {
     return {
       success: true,
     };
-  } catch (e: any) {
+  } catch {
     return {
       error: true,
       message: "An error occurred",
@@ -192,7 +194,7 @@ export async function depositPot(id: number, amount: number) {
     return {
       success: true,
     };
-  } catch (e: any) {
+  } catch {
     return {
       error: true,
       message: "An error occurred",
@@ -238,7 +240,7 @@ export async function withdrawPot(id: number, amount: number) {
     return {
       success: true,
     };
-  } catch (e: any) {
+  } catch {
     return {
       error: true,
       message: "An error occurred",

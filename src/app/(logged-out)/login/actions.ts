@@ -6,10 +6,8 @@ import z from "zod";
 
 export async function loginWithCredentials({
   credentials,
-  token,
 }: {
   credentials: z.infer<typeof loginFormSchema>;
-  token?: string;
 }) {
   const loginValidation = loginFormSchema.safeParse(credentials);
 
@@ -30,7 +28,7 @@ export async function loginWithCredentials({
     return {
       success: true,
     };
-  } catch (e) {
+  } catch {
     return {
       error: true,
       message: "Incorrect email or password",

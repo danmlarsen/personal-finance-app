@@ -39,7 +39,7 @@ export async function getRecurringBills({
     })
     .from(latest);
 
-  let filters = [];
+  const filters = [];
 
   if (billTitle) {
     filters.push(ilike(latest.name, `%${billTitle}%`));

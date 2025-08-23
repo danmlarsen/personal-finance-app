@@ -45,8 +45,9 @@ export async function registerUser({
     return {
       success: true,
     };
-  } catch (e: any) {
-    if (e?.cause?.code === "23505") {
+  } catch (e: unknown) {
+    const err = e as { cause?: { code?: string } };
+    if (err?.cause?.code === "23505") {
       return {
         error: true,
         message: "An account is already registered with that email address.",

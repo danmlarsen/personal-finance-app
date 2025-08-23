@@ -34,7 +34,8 @@ export default async function BudgetsPage() {
               <CardTitle>No budgets found</CardTitle>
             </CardHeader>
             <CardContent>
-              You have no budgets yet. Click "Add New Budget" to get started.
+              You have no budgets yet. Click &quot;Add New Budget&quot; to get
+              started.
             </CardContent>
           </Card>
         )}
