@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import AmountInput from "@/components/ui/amount-input";
 import PotsNewAmountDisplay from "./pots-new-amount-display";
 import { toast } from "sonner";
+import numeral from "numeral";
 
 const formSchema = z.object({
   amount: z.coerce
@@ -59,10 +60,14 @@ export default function PotsTransactionForm({
 
     if (response.success) {
       if (transactionType === "deposit") {
-        toast.success(`Successfully added ${data.amount} to ${pot.name}`);
+        toast.success(
+          `Successfully added ${numeral(data.amount).format("$0,0.00")} to ${pot.name}`,
+        );
       }
       if (transactionType === "withdraw") {
-        toast.success(`Successfully withdrew ${data.amount} from ${pot.name}`);
+        toast.success(
+          `Successfully withdrew ${numeral(data.amount).format("$0,0.00")} from ${pot.name}`,
+        );
       }
 
       router.refresh();
