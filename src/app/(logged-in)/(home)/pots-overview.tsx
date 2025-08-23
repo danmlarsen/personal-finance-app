@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getPots } from "@/data/getPots";
+import { getCachedPots } from "@/data/getPots";
 import Image from "next/image";
 import Link from "next/link";
 import IconPot from "@/assets/images/icon-pot.svg";
@@ -13,7 +13,7 @@ export default async function PotsOverview() {
   if (!session?.user?.id) return null;
 
   const userId = Number(session.user.id);
-  const pots = await getPots(userId);
+  const pots = await getCachedPots(userId);
 
   const totalSaved = pots.reduce((total, pot) => total + Number(pot.total), 0);
 

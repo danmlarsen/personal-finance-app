@@ -6,6 +6,7 @@ import { balanceTable, potsTable } from "@/db/schema";
 import { potsFormSchema } from "@/validation/potsFormSchema";
 import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
+import { revalidateTag } from "next/cache";
 
 export async function createPot(data: z.infer<typeof potsFormSchema>) {
   const session = await auth();
@@ -31,6 +32,8 @@ export async function createPot(data: z.infer<typeof potsFormSchema>) {
       target: data.target.toString(),
       total: "0",
     });
+
+    revalidateTag(`pots-${session.user.id}`);
 
     return {
       success: true,
@@ -85,6 +88,8 @@ export async function editPot(
         ),
       );
 
+    revalidateTag(`pots-${session.user.id}`);
+
     return {
       success: true,
     };
@@ -105,25 +110,21 @@ export async function editPot(
 }
 
 export async function deletePot(id: number) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      error: true,
+      message: "Unauthorized",
+    };
+  }
+  const userId = Number(session.user?.id);
+
   try {
     await db.transaction(async (tx) => {
-      const session = await auth();
-      if (!session?.user?.id) {
-        return {
-          error: true,
-          message: "Unauthorized",
-        };
-      }
-
       const [data] = await tx
         .select({ total: potsTable.total })
         .from(potsTable)
-        .where(
-          and(
-            eq(potsTable.id, id),
-            eq(potsTable.userId, Number(session.user.id)),
-          ),
-        );
+        .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
 
       if (!data) {
         return {
@@ -135,16 +136,13 @@ export async function deletePot(id: number) {
       await tx
         .update(balanceTable)
         .set({ current: sql`${balanceTable.current} + ${data.total}` })
-        .where(eq(balanceTable.userId, Number(session.user.id)));
+        .where(eq(balanceTable.userId, userId));
       await tx
         .delete(potsTable)
-        .where(
-          and(
-            eq(potsTable.id, id),
-            eq(potsTable.userId, Number(session.user.id)),
-          ),
-        );
+        .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
     });
+
+    revalidateTag(`pots-${session.user.id}`);
 
     return {
       success: true,
@@ -191,6 +189,8 @@ export async function depositPot(id: number, amount: number) {
         .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
     });
 
+    revalidateTag(`pots-${session.user.id}`);
+
     return {
       success: true,
     };
@@ -236,6 +236,8 @@ export async function withdrawPot(id: number, amount: number) {
         .set({ total: sql`${potsTable.total} - ${amount}` })
         .where(and(eq(potsTable.id, id), eq(potsTable.userId, userId)));
     });
+
+    revalidateTag(`pots-${session.user.id}`);
 
     return {
       success: true,

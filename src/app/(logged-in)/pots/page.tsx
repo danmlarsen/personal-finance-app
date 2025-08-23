@@ -1,6 +1,6 @@
 import PotsList from "./pots-list";
 import AddNewPotButton from "./add-new-pot-button";
-import { getPots } from "@/data/getPots";
+import { getCachedPots } from "@/data/getPots";
 import { unauthorized } from "next/navigation";
 import { auth } from "@/auth";
 import { PotsContextProvider } from "./pots-context";
@@ -13,7 +13,7 @@ export default async function PotsPage() {
   }
   const userId = Number(session.user.id);
 
-  const pots = await getPots(userId);
+  const pots = await getCachedPots(userId);
 
   return (
     <PotsContextProvider value={pots}>
