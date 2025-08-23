@@ -15,7 +15,7 @@ export default function DesktopNav() {
       <div className={cn("hidden w-[300px] lg:block", isMinimized && "w-20")} />
       <div
         className={cn(
-          "bg-grey-900 fixed top-0 bottom-0 left-0 z-10 hidden w-[300px] grid-rows-[auto_1fr_auto] rounded-r-xl pr-6 pb-6 text-white lg:grid",
+          "bg-grey-900 fixed top-0 bottom-0 left-0 z-10 hidden w-[300px] grid-rows-[auto_1fr_auto] rounded-r-xl pr-6 pb-6 lg:grid",
           isMinimized && "w-20 pr-0",
         )}
       >
@@ -26,7 +26,7 @@ export default function DesktopNav() {
         <Button
           variant="ghost"
           onClick={() => setIsMinimized((isMinimized) => !isMinimized)}
-          className="h-14 gap-4 font-bold"
+          className="hover:bg-grey-900 hover:text-grey-300 h-14 justify-start gap-4 !pl-8 font-bold"
         >
           {!isMinimized && (
             <>
