@@ -28,6 +28,13 @@ export default function TransactionsPagination({
 
   const isMobile = useMediaQuery("(max-width: 768px)");
 
+  const prevPage = curPage > 1 ? curPage - 1 : 1;
+  const prevPageSearchParams = new URLSearchParams(newSearchParams.toString());
+  prevPageSearchParams.set("page", prevPage.toString());
+  const nextPage = curPage < numPages ? curPage + 1 : numPages;
+  const nextPageSearchParams = new URLSearchParams(newSearchParams.toString());
+  nextPageSearchParams.set("page", nextPage.toString());
+
   return (
     <div className="grid grid-cols-[auto_1fr_auto]">
       <Button
@@ -37,7 +44,7 @@ export default function TransactionsPagination({
         className="size-10 md:size-auto"
       >
         <Link
-          href={`/transactions?page=${curPage > 1 ? curPage - 1 : 1}`}
+          href={`/transactions?${prevPageSearchParams.toString()}`}
           className="flex items-center gap-4"
         >
           <IconCaretLeft className="text-grey-500" />
@@ -95,7 +102,7 @@ export default function TransactionsPagination({
         className="size-10 md:size-auto"
       >
         <Link
-          href={`/transactions?page=${curPage < numPages ? curPage + 1 : numPages}`}
+          href={`/transactions?${nextPageSearchParams.toString()}`}
           className="flex items-center gap-4"
         >
           <span className="hidden md:inline">Next</span>
