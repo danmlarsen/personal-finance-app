@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import z from "zod";
 import { registerUser } from "./actions";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function SignupForm() {
   const router = useRouter();
@@ -39,6 +40,7 @@ export default function SignupForm() {
     }
 
     if (response.success) {
+      toast.success("Account created successfully. Please log in.");
       router.push("/login");
     }
   }
