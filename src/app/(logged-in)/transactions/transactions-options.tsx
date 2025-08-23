@@ -161,7 +161,7 @@ export default function TransactionsOptions({
                       />
                     )}
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="min-w-[11rem]">
                     <SelectItem value="all">All Transactions</SelectItem>
                     {categories.map((category) => (
                       <SelectItem key={category} value={category.toLowerCase()}>
