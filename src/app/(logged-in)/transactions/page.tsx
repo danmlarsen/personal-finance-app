@@ -10,6 +10,8 @@ import TransactionsOptions from "./transactions-options";
 import { getCategories } from "@/data/getCategories";
 import TransactionsPagination from "./transactions-pagination";
 
+export const revalidate = 3600; // Revalidate this page every hour
+
 export default async function TransactionsPage({
   searchParams,
 }: {

@@ -4,6 +4,8 @@ import RecurringBillsSummary from "./recurring-bills-summary";
 import { getRecurringBills } from "@/data/getRecurringBills";
 import RecurringBillsOptions from "./recurring-bills-options";
 
+export const revalidate = 3600; // Revalidate this page every hour
+
 export default async function RecurringBillsPage({
   searchParams,
 }: {
