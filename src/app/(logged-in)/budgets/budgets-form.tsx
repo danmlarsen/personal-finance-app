@@ -59,103 +59,105 @@ export default function BudgetsForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Budget Category</FormLabel>
-              <Select
-                value={String(field.value)}
-                onValueChange={(value) => field.onChange(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((category) => (
-                    <SelectItem
-                      key={category.id}
-                      value={category.id.toString()}
-                      disabled={
-                        alreadyUsedCategories.includes(category.id) &&
-                        category.id !== defaultValues?.category
-                      }
-                      isUsed={
-                        alreadyUsedCategories.includes(category.id) &&
-                        category.id !== defaultValues?.category
-                      }
-                    >
-                      {category.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <fieldset
+          disabled={form.formState.isSubmitting}
+          className="flex flex-col gap-4"
+        >
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Budget Category</FormLabel>
+                <Select
+                  value={String(field.value)}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                        disabled={
+                          alreadyUsedCategories.includes(category.id) &&
+                          category.id !== defaultValues?.category
+                        }
+                        isUsed={
+                          alreadyUsedCategories.includes(category.id) &&
+                          category.id !== defaultValues?.category
+                        }
+                      >
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="maximum"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Maximum Spend</FormLabel>
-              <FormControl>
-                <AmountInput {...field} placeholder="e.g. 2000" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="maximum"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Maximum Spend</FormLabel>
+                <FormControl>
+                  <AmountInput {...field} placeholder="e.g. 2000" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="theme"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Theme</FormLabel>
-              <Select
-                defaultValue={field.value}
-                onValueChange={(value) => field.onChange(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {themeColors.map((theme) => (
-                    <SelectItem
-                      key={theme.name}
-                      value={theme.hex}
-                      disabled={
-                        alreadyUsedColors.includes(theme.hex) &&
-                        theme.hex !== field.value
-                      }
-                      isUsed={
-                        alreadyUsedColors.includes(theme.hex) &&
-                        theme.hex !== field.value
-                      }
-                    >
-                      <div
-                        className="size-4 rounded-full"
-                        style={{ backgroundColor: theme.hex }}
-                      />
-                      <div>{theme.name}</div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="theme"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Theme</FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {themeColors.map((theme) => (
+                      <SelectItem
+                        key={theme.name}
+                        value={theme.hex}
+                        disabled={
+                          alreadyUsedColors.includes(theme.hex) &&
+                          theme.hex !== field.value
+                        }
+                        isUsed={
+                          alreadyUsedColors.includes(theme.hex) &&
+                          theme.hex !== field.value
+                        }
+                      >
+                        <div
+                          className="size-4 rounded-full"
+                          style={{ backgroundColor: theme.hex }}
+                        />
+                        <div>{theme.name}</div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" className="w-full" size="lg">
-          {submitButtonText}
-        </Button>
+          <Button type="submit" className="w-full" size="lg">
+            {submitButtonText}
+          </Button>
+        </fieldset>
       </form>
     </Form>
   );

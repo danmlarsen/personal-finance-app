@@ -36,6 +36,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { categoriesTable } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import IconElipsis from "@/components/ui/svg/icon-elipsis";
+import { toast } from "sonner";
 
 export default function BudgetsDropdownMenu({
   budget,
@@ -51,6 +52,11 @@ export default function BudgetsDropdownMenu({
   async function onEditBudget(data: z.infer<typeof budgetFormSchema>) {
     const response = await editBudget(budget.id, data);
 
+    if (response.error) {
+      toast.error(response.message);
+      return;
+    }
+
     if (response.success) {
       setEditDialogOpen(false);
       router.refresh();
@@ -58,8 +64,19 @@ export default function BudgetsDropdownMenu({
   }
 
   async function onDeleteBudget() {
-    await deleteBudget(budget.id);
-    router.refresh();
+    const response = await deleteBudget(budget.id);
+
+    if (response.error) {
+      toast.error(response.message);
+      return;
+    }
+
+    if (response.success) {
+      toast.success(
+        `Budget for category: ${budget.name} deleted successfully.`,
+      );
+      router.refresh();
+    }
   }
 
   return (

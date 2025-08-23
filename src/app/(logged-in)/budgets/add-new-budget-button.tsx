@@ -17,6 +17,7 @@ import BudgetsForm from "./budgets-form";
 import { InferSelectModel } from "drizzle-orm";
 import { categoriesTable } from "@/db/schema";
 import { createBudget } from "./actions";
+import { toast } from "sonner";
 
 export default function AddNewBudgetButton({
   categories,
@@ -32,6 +33,14 @@ export default function AddNewBudgetButton({
     if (response.success) {
       router.refresh();
       setIsOpen(false);
+
+      const createdBudgetName = categories.find(
+        (category) => category.id === data.category,
+      )?.name;
+
+      toast.success(
+        `Budget${createdBudgetName ? ` for category: ${createdBudgetName}` : ""} created successfully.`,
+      );
     }
   }
 
