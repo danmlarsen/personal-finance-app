@@ -30,7 +30,12 @@ export default function TransactionsPagination({
 
   return (
     <div className="grid grid-cols-[auto_1fr_auto]">
-      <Button variant="outline" asChild={curPage > 1} disabled={curPage <= 1}>
+      <Button
+        variant="outline"
+        asChild={curPage > 1}
+        disabled={curPage <= 1}
+        className="size-10 md:size-auto"
+      >
         <Link
           href={`/transactions?page=${curPage > 1 ? curPage - 1 : 1}`}
           className="flex items-center gap-4"
@@ -42,7 +47,23 @@ export default function TransactionsPagination({
       <div className="flex justify-center gap-2">
         {Array.from({ length: numPages }).map((_, idx) => {
           const pageNum = idx + 1;
-          newSearchParams.set("page", pageNum.toString());
+
+          if (
+            isMobile &&
+            ((pageNum === 2 && curPage > 3) ||
+              (pageNum === numPages - 1 && curPage < numPages - 2))
+          ) {
+            return (
+              <Button
+                variant="outline"
+                disabled
+                key={idx}
+                className="text-grey-500 size-10 px-2 select-none disabled:opacity-100"
+              >
+                ...
+              </Button>
+            );
+          }
 
           if (
             isMobile &&
@@ -52,11 +73,13 @@ export default function TransactionsPagination({
           )
             return;
 
+          newSearchParams.set("page", pageNum.toString());
           return (
             <Button
               variant={curPage === pageNum ? "default" : "outline"}
               key={idx}
               asChild={curPage !== pageNum}
+              className="size-10"
             >
               <Link href={`/transactions?${newSearchParams.toString()}`}>
                 {pageNum}
@@ -69,6 +92,7 @@ export default function TransactionsPagination({
         variant="outline"
         asChild={curPage < numPages}
         disabled={curPage >= numPages}
+        className="size-10 md:size-auto"
       >
         <Link
           href={`/transactions?page=${curPage < numPages ? curPage + 1 : numPages}`}
