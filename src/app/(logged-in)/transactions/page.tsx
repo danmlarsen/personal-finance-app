@@ -40,7 +40,9 @@ export default async function TransactionsPage({
 
   return (
     <div className="space-y-8">
-      <h1 className="text-3xl font-bold">Transactions</h1>
+      <div className="flex min-h-14 items-center justify-between">
+        <h1 className="text-3xl font-bold">Transactions</h1>
+      </div>
       <Card>
         <CardHeader>
           <TransactionsOptions categories={categories.map((c) => c.name)} />

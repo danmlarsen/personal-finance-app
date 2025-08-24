@@ -9,7 +9,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Home() {
   return (
     <div className="@container space-y-8">
-      <h1 className="text-3xl font-bold">Overview</h1>
+      <div className="flex min-h-14 items-center justify-between">
+        <h1 className="text-3xl font-bold">Overview</h1>
+      </div>
       <Suspense fallback={<Skeleton className="h-60" />}>
         <BalanceOverview />
       </Suspense>

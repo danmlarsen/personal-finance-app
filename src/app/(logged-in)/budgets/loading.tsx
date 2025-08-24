@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function Loading() {
   return (
     <div className="@container space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex min-h-14 items-center justify-between">
         <h1 className="text-3xl font-bold">Budgets</h1>
         <Skeleton className="h-14 w-36" />
       </div>

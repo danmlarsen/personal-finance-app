@@ -15,13 +15,13 @@ export default async function LoggedInLayout({
   }
 
   return (
-    <>
+    <div className="mx-auto max-w-[1440px]">
       <div className="grid min-h-dvh lg:grid-cols-[auto_1fr]">
         <DesktopNav />
         <main className="px-4 py-6 md:px-10 md:py-8">{children}</main>
       </div>
 
       <MobileNav />
-    </>
+    </div>
   );
 }

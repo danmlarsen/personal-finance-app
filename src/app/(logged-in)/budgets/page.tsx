@@ -23,7 +23,7 @@ export default async function BudgetsPage() {
   return (
     <BudgetsContextProvider value={budgets}>
       <div className="@container space-y-8">
-        <div className="flex items-center justify-between">
+        <div className="flex min-h-14 items-center justify-between">
           <h1 className="text-3xl font-bold">Budgets</h1>
           <AddNewBudgetButton categories={categories} />
         </div>

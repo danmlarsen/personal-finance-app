@@ -18,7 +18,7 @@ export default async function PotsPage() {
   return (
     <PotsContextProvider value={pots}>
       <div className="space-y-8">
-        <div className="flex items-center justify-between">
+        <div className="flex min-h-14 items-center justify-between">
           <h1 className="text-3xl font-bold">Pots</h1>
           <AddNewPotButton />
         </div>
