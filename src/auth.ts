@@ -4,44 +4,44 @@ import { db } from "./db";
 import { usersTable } from "./db/schema";
 import { eq } from "drizzle-orm";
 import { compare } from "bcryptjs";
+import z from "zod";
+import { authConfig } from "./auth.config";
+
+const credentialsSchema = z.object({
+  email: z.email(),
+  password: z.string().min(1),
+});
+
+const DUMMY_HASH =
+  "$2b$12$wtnECMo1eIx0OflRDunSNeN6zOFiM3Zzz0UkNYV7bjMePzKYYw8pa";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
-      return token;
-    },
-    session({ session, token }) {
-      session.user.id = token.id as string;
-      return session;
-    },
-  },
+  ...authConfig,
   providers: [
     Credentials({
       credentials: {
         email: {},
         password: {},
       },
-      async authorize(credentials) {
+      async authorize(rawCredentials) {
+        const validation = credentialsSchema.safeParse(rawCredentials);
+        if (!validation.success) return null;
+
+        const { email, password } = validation.data;
+
         const [user] = await db
           .select()
           .from(usersTable)
-          .where(eq(usersTable.email, credentials.email as string));
+          .where(eq(usersTable.email, email))
+          .limit(1);
 
         if (!user) {
-          throw new Error("Incorrect credentials");
+          await compare(password, DUMMY_HASH);
+          return null;
         }
 
-        const passwordCorrect = await compare(
-          credentials.password as string,
-          user.password,
-        );
-
-        if (!passwordCorrect) {
-          throw new Error("Incorrect credentials");
-        }
+        const passwordCorrect = await compare(password, user.password);
+        if (!passwordCorrect) return null;
 
         return {
           id: user.id.toString(),
