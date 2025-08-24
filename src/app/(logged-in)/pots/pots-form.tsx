@@ -64,95 +64,94 @@ export default function PotsForm({
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem className="mb-5">
-              <FormLabel>Pot Name</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  placeholder="e.g. Rainy Days"
-                  maxLength={NAME_MAXLENGTH}
-                />
-              </FormControl>
-              <div className="relative">
-                <FormMessage />
-                <div className="text-muted-foreground absolute top-1 right-0 text-end text-xs">
-                  {Math.max(NAME_MAXLENGTH - field.value.length, 0)} characters
-                  left
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <fieldset className="flex flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem className="mb-5">
+                <FormLabel>Pot Name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="e.g. Rainy Days"
+                    maxLength={NAME_MAXLENGTH}
+                  />
+                </FormControl>
+                <div className="relative">
+                  <FormMessage />
+                  <div className="text-muted-foreground absolute top-1 right-0 text-end text-xs">
+                    {Math.max(NAME_MAXLENGTH - field.value.length, 0)}{" "}
+                    characters left
+                  </div>
                 </div>
-              </div>
-            </FormItem>
-          )}
-        />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="target"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Target</FormLabel>
-              <FormControl>
-                <AmountInput {...field} placeholder="e.g. 2000" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="target"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Target</FormLabel>
+                <FormControl>
+                  <AmountInput {...field} placeholder="e.g. 2000" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="theme"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Theme</FormLabel>
-              <Select
-                defaultValue={field.value}
-                onValueChange={(value) => field.onChange(value)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {themeColors.map((theme, idx) => (
-                    <Fragment key={theme.name}>
-                      <SelectItem
-                        value={theme.hex}
-                        disabled={
-                          alreadyUsedColors.includes(theme.hex) &&
-                          theme.hex !== defaultValues?.theme
-                        }
-                        isUsed={
-                          alreadyUsedColors.includes(theme.hex) &&
-                          theme.hex !== defaultValues?.theme
-                        }
-                      >
-                        <div
-                          className="size-4 rounded-full"
-                          style={{ backgroundColor: theme.hex }}
-                        />
-                        <div>{theme.name}</div>
-                      </SelectItem>
-                      {idx < themeColors.length - 1 && <SelectSeparator />}
-                    </Fragment>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="theme"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Theme</FormLabel>
+                <Select
+                  defaultValue={field.value}
+                  onValueChange={(value) => field.onChange(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {themeColors.map((theme, idx) => (
+                      <Fragment key={theme.name}>
+                        <SelectItem
+                          value={theme.hex}
+                          disabled={
+                            alreadyUsedColors.includes(theme.hex) &&
+                            theme.hex !== defaultValues?.theme
+                          }
+                          isUsed={
+                            alreadyUsedColors.includes(theme.hex) &&
+                            theme.hex !== defaultValues?.theme
+                          }
+                        >
+                          <div
+                            className="size-4 rounded-full"
+                            style={{ backgroundColor: theme.hex }}
+                          />
+                          <div>{theme.name}</div>
+                        </SelectItem>
+                        {idx < themeColors.length - 1 && <SelectSeparator />}
+                      </Fragment>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
 
-        {submitErrorText && <FormMessage>{submitErrorText}</FormMessage>}
+          {submitErrorText && <FormMessage>{submitErrorText}</FormMessage>}
 
-        <Button type="submit" size="lg" className="mt-1">
-          {submitButtonText}
-        </Button>
+          <Button type="submit" size="lg" className="mt-1">
+            {submitButtonText}
+          </Button>
+        </fieldset>
       </form>
     </Form>
   );

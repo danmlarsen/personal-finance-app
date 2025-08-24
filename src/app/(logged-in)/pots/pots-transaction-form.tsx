@@ -80,29 +80,31 @@ export default function PotsTransactionForm({
           transactionType={transactionType}
         />
 
-        <FormField
-          control={form.control}
-          name="amount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Amount to {transactionType === "deposit" ? "Add" : "Withdraw"}
-              </FormLabel>
-              <FormControl>
-                <AmountInput {...field} placeholder="e.g. 2000" />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+        <fieldset className="space-y-4" disabled={form.formState.isSubmitting}>
+          <FormField
+            control={form.control}
+            name="amount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Amount to {transactionType === "deposit" ? "Add" : "Withdraw"}
+                </FormLabel>
+                <FormControl>
+                  <AmountInput {...field} placeholder="e.g. 2000" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {!!form.formState.errors.root?.message && (
+            <FormMessage>{form.formState.errors.root.message}</FormMessage>
           )}
-        />
 
-        {!!form.formState.errors.root?.message && (
-          <FormMessage>{form.formState.errors.root.message}</FormMessage>
-        )}
-
-        <Button type="submit" className="mt-2 w-full" size="lg">
-          Confirm {transactionType === "deposit" ? "Addition" : "Withdrawal"}
-        </Button>
+          <Button type="submit" className="mt-2 w-full" size="lg">
+            Confirm {transactionType === "deposit" ? "Addition" : "Withdrawal"}
+          </Button>
+        </fieldset>
       </form>
     </Form>
   );
