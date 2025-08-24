@@ -21,7 +21,7 @@ export async function createBudget(data: z.infer<typeof budgetFormSchema>) {
   if (!validation.success) {
     return {
       error: true,
-      message: validation.error.issues,
+      message: validation.error.issues[0].message ?? "An error occurred.",
     };
   }
 
