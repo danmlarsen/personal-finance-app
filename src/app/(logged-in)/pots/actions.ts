@@ -7,6 +7,7 @@ import { potsFormSchema } from "@/validation/potsFormSchema";
 import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { revalidateTag } from "next/cache";
+import { potsTransactionFormSchema } from "@/validation/potsTransactionFormSchema";
 
 export async function createPot(data: z.infer<typeof potsFormSchema>) {
   const session = await auth();
@@ -165,6 +166,14 @@ export async function depositPot(id: number, amount: number) {
   }
   const userId = Number(session.user?.id);
 
+  const validation = z.safeParse(potsTransactionFormSchema, { amount });
+  if (!validation.success) {
+    return {
+      error: true,
+      message: validation.error.issues[0].message ?? "An error occurred",
+    };
+  }
+
   try {
     const [row] = await db
       .select({ current: balanceTable.current })
@@ -211,6 +220,14 @@ export async function withdrawPot(id: number, amount: number) {
     };
   }
   const userId = Number(session.user?.id);
+
+  const validation = z.safeParse(potsTransactionFormSchema, { amount });
+  if (!validation.success) {
+    return {
+      error: true,
+      message: validation.error.issues[0].message ?? "An error occurred",
+    };
+  }
 
   try {
     const [row] = await db

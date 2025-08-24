@@ -20,13 +20,7 @@ import AmountInput from "@/components/ui/amount-input";
 import PotsNewAmountDisplay from "./pots-new-amount-display";
 import { toast } from "sonner";
 import numeral from "numeral";
-
-const formSchema = z.object({
-  amount: z.coerce
-    .number<string | number>()
-    .positive("Please enter a positive number")
-    .max(10000, "Maximum transaction amount is $10,000"),
-});
+import { potsTransactionFormSchema } from "@/validation/potsTransactionFormSchema";
 
 export default function PotsTransactionForm({
   pot,
@@ -39,13 +33,13 @@ export default function PotsTransactionForm({
 }) {
   const router = useRouter();
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(potsTransactionFormSchema),
     defaultValues: {
       amount: "",
     },
   });
 
-  async function handleSubmit(data: z.infer<typeof formSchema>) {
+  async function handleSubmit(data: z.infer<typeof potsTransactionFormSchema>) {
     const response =
       transactionType === "deposit"
         ? await depositPot(pot.id, data.amount)
