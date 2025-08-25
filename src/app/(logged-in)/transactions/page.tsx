@@ -7,7 +7,7 @@ import {
 import TransactionsList from "./transactions-list";
 import { getTransactions } from "@/data/getTransactions";
 import TransactionsOptions from "./transactions-options";
-import { getCategories } from "@/data/getCategories";
+import { getCachedCategories } from "@/data/getCategories";
 import TransactionsPagination from "./transactions-pagination";
 
 export const revalidate = 3600; // Revalidate this page every hour
@@ -28,13 +28,16 @@ export default async function TransactionsPage({
   const category = searchParamValues.category || "all";
   const page = Number(searchParamValues.page) || 1;
 
-  const categories = await getCategories();
-  const { totalNumTransactions, transactions } = await getTransactions({
-    transactionName,
-    category,
-    sortBy,
-    page,
-  });
+  const [categories, { totalNumTransactions, transactions }] =
+    await Promise.all([
+      getCachedCategories(),
+      getTransactions({
+        transactionName,
+        category,
+        sortBy,
+        page,
+      }),
+    ]);
 
   const numPages = Math.ceil(totalNumTransactions / 10);
 
